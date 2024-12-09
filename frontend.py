@@ -4,18 +4,22 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
-
+from main import *
 class Ui_Logo(object):
     def setupUi(self, Logo):
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.update_time_date_temperature)
+        self.timer.start(1000)  # Update every second
+
         Logo.setWindowTitle("Jarwis")
-        Logo.setWindowIcon(QIcon("C:/Users/sigde/OneDrive/Desktop/logo.png"))
+        Logo.setWindowIcon(QIcon("D:/New_Virtual_Assistant/logo.png"))
         Logo.setObjectName("Logo")
         Logo.resize(1325, 815)
         self.gif_label = QtWidgets.QLabel(Logo)
         self.gif_label.setGeometry(QtCore.QRect(0, 0, 1325, 815))  # Adjust the size as per your needs
         self.gif_label.setScaledContents(True)  # Ensures the GIF scales to fit the QLabel
         
-        self.movie = QMovie("C:/Users/sigde/OneDrive/Desktop/QNBH.gif")  # Make sure the path is correct
+        self.movie = QMovie("D:/New_Virtual_Assistant/QNBH.gif")  # Make sure the path is correct
         self.gif_label.setMovie(self.movie)
         self.movie.start()
         Logo.setStyleSheet("")
@@ -44,6 +48,7 @@ class Ui_Logo(object):
         font.setFamily("Palatino Linotype")
         font.setPointSize(10)
         self.Name.setFont(font)
+        self.Face.clicked.connect(take_sample)
         self.Name.setStyleSheet("QPushButton {\n"
 "                background: rgb(255, 255, 0);\n"
 "                border-radius: 10px;\n"
@@ -65,7 +70,7 @@ class Ui_Logo(object):
         self.Start.setStyleSheet("QPushButton {\n"
 "                background: rgb(255, 255, 0);\n"
 "                border-radius: 10px;\n"
-   "background-image: url('C:/Users/sigde/OneDrive/Desktop/mic.jpg');"  # Replace with your microphone image path
+   "background-image: url('D:/New_Virtual_Assistant/mic.jpg');"  # Replace with your microphone image path
 "                background-repeat: no-repeat;\n"
 "                background-position: center;\n"
 "            }\n"
@@ -79,12 +84,15 @@ class Ui_Logo(object):
         self.Start.setIcon(icon)
         self.Start.setIconSize(QtCore.QSize(60, 50))
         self.Start.setObjectName("Start")
+        self.Start.clicked.connect(lambda: [self.disable_other_buttons(), main2()])
+
         self.Password = QtWidgets.QPushButton(Logo)
         self.Password.setGeometry(QtCore.QRect(520, 740, 131, 61))
         font = QtGui.QFont()
         font.setFamily("Palatino Linotype")
         font.setPointSize(10)
         self.Password.setFont(font)
+        # self.Start.clicked.connect(main2)
         self.Password.setStyleSheet("QPushButton {\n"
 "                background: rgb(255, 255, 0);\n"
 "                border-radius: 10px;\n"
@@ -120,7 +128,7 @@ class Ui_Logo(object):
         self.Terminate.setStyleSheet("QPushButton {\n"
 "                background: rgb(255, 255, 0);\n"
 "                border-radius: 10px;\n"
-"                background-image: url('C:/Users/sigde/OneDrive/Desktop/stop.jpg');"  # Replace with your microphone image path
+"                background-image: url('D:/New_Virtual_Assistant/stop.jpg');"  # Replace with your microphone image path
 "                background-repeat: no-repeat;\n"
 "                background-position: center;\n"
 "            }\n"
@@ -137,6 +145,9 @@ class Ui_Logo(object):
         font.setBold(True)
         font.setWeight(75)
         self.searchbar.setFont(font)
+        # self.Terminate.clicked.connect(exit)
+        self.Terminate.clicked.connect(lambda: sys.exit(0))
+
         self.searchbar.setStyleSheet("QLineEdit {\n"
 "                background: white;\n"
                 "background-color: rgba(255, 255, 255, 0.3);"
@@ -199,7 +210,7 @@ class Ui_Logo(object):
 "            }")
         self.chatplace.setObjectName("chatplace")
         self.Date = QtWidgets.QLabel(Logo)
-        self.Date.setGeometry(QtCore.QRect(1170, 130, 131, 71))
+        self.Date.setGeometry(QtCore.QRect(1170, 130, 150, 71))
         font = QtGui.QFont()
         font.setFamily("Stencil")
         font.setPointSize(10)
@@ -209,7 +220,7 @@ class Ui_Logo(object):
 "border: 2px solid rgb(102, 255, 102);")
         self.Date.setObjectName("Date")
         self.Time = QtWidgets.QLabel(Logo)
-        self.Time.setGeometry(QtCore.QRect(1170, 210, 131, 71))
+        self.Time.setGeometry(QtCore.QRect(1170, 210, 150, 71))
         font = QtGui.QFont()
         font.setFamily("Stencil")
         font.setPointSize(10)
@@ -219,7 +230,7 @@ class Ui_Logo(object):
 "border: 2px solid rgb(102, 255, 102);")
         self.Time.setObjectName("Time")
         self.Temperature = QtWidgets.QLabel(Logo)
-        self.Temperature.setGeometry(QtCore.QRect(1170, 290, 131, 71))
+        self.Temperature.setGeometry(QtCore.QRect(1170, 290, 150, 71))
         font = QtGui.QFont()
         font.setFamily("Stencil")
         font.setPointSize(10)
@@ -272,19 +283,31 @@ class Ui_Logo(object):
     }
 """)
         Logo.setStyleSheet("QDialog {"
-                           "background-image: url('C:/Users/sigde/OneDrive/Desktop/QNBH.gif');"  # Replace with your image file name
+                           "background-image: url('D:/New_Virtual_Assistant/QNBH.gif');"  # Replace with your image file name
                            "background-repeat: no-repeat;"
                            "background-position: center;"
                            "background-attachment: fixed;"
                            "}")
         self.retranslateUi(Logo)
         QtCore.QMetaObject.connectSlotsByName(Logo)
-        self.player = QMediaPlayer()
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile("D:/Downloads/jarvis_ringtone.mp3")))  # Correct path to sound
-        self.player.setVolume(100)  # Set volume level (0 to 100)
-        self.player.play()
         self.retranslateUi(Logo)
         QtCore.QMetaObject.connectSlotsByName(Logo)
+        from datetime import datetime
+
+    def update_time_date_temperature(self):
+        """
+        Updates the Date, Time, and Temperature labels periodically.
+        """
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.now().strftime("%H:%M:%S")
+        
+        # Replace with actual temperature fetching logic
+        temperature = "25°C"
+
+        self.Date.setText(f"Date: {current_date}")
+        self.Time.setText(f"Time: {current_time}")
+        self.Temperature.setText(f"Temp: {temperature}")
+
     def add_glow_animation(self, button):
         # Create a shadow effect with an animated glow
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -301,6 +324,16 @@ class Ui_Logo(object):
         # self.animation.setLoopCount(-1)
         self.animation.setEasingCurve(QtCore.QEasingCurve.InOutQuad)
         self.animation.start()
+    def disable_other_buttons(self):
+        """Disables all buttons except Terminate and Stop."""
+        self.Face.setEnabled(False)
+        self.Name.setEnabled(False)
+        self.Password.setEnabled(False)
+        self.Reset.setEnabled(False)
+        self.Clear.setEnabled(False)
+        self.Clear_2.setEnabled(False)
+        self.Start.setEnabled(False)  # Optionally disable Start after it's clicked.
+
     def retranslateUi(self, Logo):
         _translate = QtCore.QCoreApplication.translate
         self.Face.setText(_translate("Logo", "Face?"))

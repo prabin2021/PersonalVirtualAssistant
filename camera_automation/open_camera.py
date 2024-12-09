@@ -8,6 +8,6 @@ def capture_photo():
 
         camera = cv2.VideoCapture(0)
         return_value, image = camera.read()
-        cv2.imwrite('captured_photo.jpg', image)
+        cv2.imwrite('D:/New_Virtual_Assistant/Face_Verification/captured_photo.jpg', image)
         del(camera)
         speak("Photo captured successfully!")

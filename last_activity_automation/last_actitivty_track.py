@@ -4,7 +4,6 @@ import os
 import json
 import pygetwindow as gw
 import time
-import psutil
 
 # File to store the last activity
 LAST_ACTIVITY_FILE = "last_activities.json"
@@ -33,7 +32,7 @@ def remind_last_activity():
         speak(f"Would you like to continue any of them?")
         user_input = take_user_input()
         if user_input:
-            if "yes" in user_input.lower() or "continue" in user_input.lower() or "ok" in user_input.lower():
+            if any(keyword in user_input.lower() for keyword in ("yeah","sure","ok","yes","okay","you can start","take me to","continue with")):
                 while True:
                     number = extract_number_from_command(user_input)
                     if number is not None:
@@ -125,12 +124,12 @@ def switch_to_activity(activity):
 
     print(f"Looking for a window with the title: '{window_info.get('title', '')}'")
     windows = gw.getWindowsWithTitle('')  # Get all open windows
-
     for window in windows:
         title_match = window_info.get("title", "").lower() in window.title.lower()
         folder_match = window_info.get("folder", "").lower() in window.title.lower() if "folder" in window_info else True
         file_match = window_info.get("file", "").lower() in window.title.lower() if "file" in window_info else True
-
+        if window.isMinimized:
+            window.restore()
         if title_match and folder_match and file_match:
             window.activate()
             print(f"Switched to activity: {window.title}")
@@ -151,7 +150,3 @@ def extract_number_from_command(command):
             return number_words[word]
     return None
 
-
-# commandd = input("Enter you commands:")
-# extract_number_from_command(commandd)
-# print(f"Extracted number: {extract_number_from_command(commandd)}")
