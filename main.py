@@ -288,7 +288,7 @@ def mind(text,response_check):
     else:
         return None
 
-# def main2():
+# def main3():
 #         # remind_last_activity()  
 #     while True:
 #         facestatus = faceverify(status="True")
