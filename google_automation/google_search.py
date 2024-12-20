@@ -14,14 +14,13 @@ def search_google(query):
             search_query = " ".join(words[i + 1:])
     print(search_query)
 
-    # if not search_query:
-    #     speak("Please specify what you want to search for.")
-    #     return
+    if not search_query:
+        speak("Please specify what you want to search for.")
+        return
 
     kit.search(search_query)
     speak("Ok sir, here is your search result.")
 
-    # Fetch the Google search results page
     google_url = f"https://www.google.com/search?q={search_query}"
     response = requests.get(google_url)
     if response.status_code != 200:
@@ -30,16 +29,14 @@ def search_google(query):
 
     soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Extract snippets from the search results
     speak("I have collected 3 results sir.")
-    snippets = soup.select('div.BNeawe.s3v9rd.AP7Wnd')[:3]  # Selecting the first 3 results
+    snippets = soup.select('div.BNeawe.s3v9rd.AP7Wnd')[:3]
     if not snippets:
         speak("No results found.")
         return
 
     result_texts = [snippet.get_text() for snippet in snippets]
-    
-    # Speak out the results
+
     for i, result in enumerate(result_texts):
         print(result)
         speak(f"Result {i+1}: {result}")

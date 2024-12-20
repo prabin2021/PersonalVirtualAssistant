@@ -4,14 +4,16 @@ import datetime
 from datetime import datetime
 def open_notepad():
         os.system('start notepad')
+        return "Notepad launched sir"
 
 def open_cmd():
         os.system('start cmd')
+        return "Command prompt launched sir"
 def tell_time():
         from main import speak
         strTime = datetime.now().strftime("%H:%M:%S")
         speak("Sir, the time is " + strTime)
-        return strTime
+        return f"The time is {strTime}"
 def minimize_screen():
         from main import speak
         speak("Ok sir, I am minimizing it.")

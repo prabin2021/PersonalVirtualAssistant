@@ -135,13 +135,13 @@ commands = {
     ],
     
     "minimize_window": [
-        "reduce window", "hide this window", "make the screen smaller", "move the window down", "lower the window","minimize the window", "can you minimize this window", "minimize my current window", "please minimize the screen", "make the window smaller",
+        "can you minimise this window","reduce window", "hide this window", "make the screen smaller", "move the window down", "lower the window","minimize the window", "can you minimize this window", "minimize my current window", "please minimize the screen", "make the window smaller",
     ],
     "maximize_window": [
-        "make the screen bigger", "bring the window up", "expand this window", "maximize the display","maximize the window", "can you maximize this window", "maximize now", "please maximize the screen", "make the window full screen", "expand the window"
+        "make the screen bigger", "can you maximise this window","bring the window up", "expand this window", "maximize the display","maximize the window", "can you maximize this window", "maximize now", "please maximize the screen", "make the window full screen", "expand the window"
     ],
     "close_window": [
-        "shut this window", "terminate this screen", "dismiss the window", "close this tab","close the window", "can you close this window", "close current window", "please close the screen", "remove this window", " this window"
+        "shut this window", "terminate this screen", "dismiss the window", "close this tab","close the window", "can you close this window", "close current window", "please close the screen", "remove this window", " close this window"
     ],
     "tell_time": [
         "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time", "i need the time"

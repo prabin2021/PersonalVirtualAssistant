@@ -4,7 +4,7 @@ import subprocess
 
 def extract_search_query(query):
         # from main_function.main import speak
-        start_keywords = ["search for","search","for"," seek for","look for", "find", "search that", "about","search about","show me","watch","i want to","i need"]
+        start_keywords = ["search for","find me","search","for"," seek for","look for", "find", "search that", "about","search about","show me","watch","i want to","i need"]
         # Split the query into words
         words = query.lower().split()
         # Initialize search query
@@ -28,7 +28,7 @@ def open_youtube():
             youtube_searched = False
             if userquery == "exit":
                 return 
-            start_keywords = ["search for","search","for"," seek for","look for", "find", "search that", "about","search about","show me","watch","i need","i want to","play","can you play"]
+            start_keywords = ["i want","search for","search","for"," seek for","look for", "find", "find me","search that", "about","search about","show me","watch","i need","i want to","play","can you play"]
             for keyword in start_keywords:
                 if keyword in userquery:
                     if not youtube_searched:

@@ -1,109 +1,213 @@
-import sys
-from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtGui import QPainter, QColor, QPen, QBrush, QRadialGradient
-from PyQt5.QtWidgets import QApplication, QWidget
-from math import sin, cos, radians
+import os
+import threading
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
-class FuturisticAnimation(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("High-Accuracy Futuristic Animation")
-        self.setGeometry(100, 100, 600, 600)
-        self.angle_outer = 0
-        self.angle_inner = 0
-        self.angle_middle = 0
+from kivy.metrics import dp
+from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen
+from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.filechooser import FileChooserIconView
+from kivy.clock import Clock
+from kivymd.app import MDApp
 
-        # Timer for animation
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_animation)
-        self.timer.start(20)  # Increased frame rate for smoother rotation
+KV = """
+ScreenManager:
+    MainScreen:
 
-        # Movement factors for oscillation
-        self.movement_factor_outer = 0
-        self.movement_factor_inner = 0
-        self.movement_speed = 0.05  # Speed of the movement in and out
+<MainScreen>:
+    name: "main"
 
-    def update_animation(self):
-        self.angle_outer += 1.5  # Fine-tuned outer rotation speed
-        self.angle_inner -= 2  # Opposite direction, slightly faster
-        self.angle_middle += 0.8  # Middle circle slower
+    FloatLayout:
+        # Background gif image
+        Image:
+            source: "D:/New_Virtual_Assistant/QNBH.gif"
+            anim_delay: 0.05
+            allow_stretch: True
+            keep_ratio: False
+            size_hint: 1, 1
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
-        if self.angle_outer >= 360: self.angle_outer = 0
-        if self.angle_inner <= -360: self.angle_inner = 0
-        if self.angle_middle >= 360: self.angle_middle = 0
+        MDLabel:
+            text: "Jarvis"
+            text: "The Virtual Assistant"
+            font_style: "H4"
+            halign: "center"
+            pos_hint: {"center_x": 0.24, "center_y": 0.95}
+            size_hint_y: None
+            height: self.texture_size[1]
+            theme_text_color: "Custom"
+            text_color: (55/255, 15/255, 200/255, 1)
 
-        # Update movement factors for oscillation
-        self.movement_factor_outer += self.movement_speed
-        self.movement_factor_inner += self.movement_speed
+        # Start button
+        MDRaisedButton:
+            text: "Start"
+            pos_hint: {"center_x": 0.1, "center_y": 0.1}
+            size_hint: None, None
+            size: dp(120), dp(50)
+            on_press: app.start_jarvis()
 
-        self.update()  # Trigger a repaint
+        # Stop button
+        MDRaisedButton:
+            text: "Stop"
+            pos_hint: {"center_x": 0.2, "center_y": 0.1}
+            size_hint: None, None
+            size: dp(120), dp(50)
+            on_press: app.stop_jarvis()
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        # Email button
+        MDRaisedButton:
+            text: "Send Email"
+            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+            size_hint: None, None
+            size: dp(120), dp(50)
+            on_press: app.open_email_popup()
 
-        # Central coordinates
-        cx, cy = self.width() / 2, self.height() / 2
+        # Conversation label area
+        ScrollView:
+            id: scroll_view
+            size_hint: 0.9, 0.5
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
 
-        # Dark background
-        painter.fillRect(self.rect(), QColor(0, 0, 0))
+            MDLabel:
+                id: conversation_label
+                font_size: "16sp"
+                halign: "left"
+                valign: "top"
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None 
 
-        # Draw glowing center and rings
-        self.draw_glowing_center(painter, cx, cy, radius=100, glow_color=QColor(0, 255, 255, 200))
+        # Clear button
+        MDRaisedButton:
+            text: "Clear"
+            pos_hint: {"center_x": 0.9, "center_y": 0.1}
+            size_hint: None, None
+            size: dp(120), dp(50)
+            on_press: app.clear_conversation()
+"""
+
+class MainScreen(Screen):
+    pass
+
+class JarvisApp(MDApp):
+    file_path = None  # To store file path for email attachments
+
+    def build(self):
+        self.title = "Jarvis Assistant"
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "BlueGray"
+        return Builder.load_string(KV)
+
+    def start_jarvis(self):
+        self.update_conversation("Jarvis started...")
+
+    def stop_jarvis(self):
+        self.update_conversation("Stopping Jarvis...")
+
+    def open_email_popup(self):
+        # Popup Layout
+        content = BoxLayout(orientation="vertical", padding=10, spacing=10)
         
-        # Calculate dynamic radii for outer and inner arcs using sine for oscillation
-        dynamic_radius_outer = 250 + 20 * sin(self.movement_factor_outer)  # Outer ring
-        dynamic_radius_inner = 180 + 15 * sin(self.movement_factor_inner)  # Inner ring
-
-        # Draw arcs with oscillation effect
-        self.draw_rotating_arcs(painter, cx, cy, radius=dynamic_radius_outer, thickness=12, 
-                                 segments=90, angle_offset=self.angle_outer, color=QColor(0, 255, 255), gap=8)
-        self.draw_rotating_arcs(painter, cx, cy, radius=dynamic_radius_inner, thickness=8, 
-                                 segments=60, angle_offset=self.angle_inner, color=QColor(0, 200, 255), gap=10)
+        # Input fields
+        self.recipient_input = TextInput(hint_text="Recipient Email", multiline=False)
+        self.subject_input = TextInput(hint_text="Subject", multiline=False)
+        self.message_input = TextInput(hint_text="Message", multiline=True, size_hint=(1, 0.5))
         
-        # Draw rotating dots
-        self.draw_rotating_dots(painter, cx, cy, radius=120, segments=40, angle_offset=self.angle_middle, color=QColor(0, 255, 200))
+        # File selection button
+        file_btn = Button(text="Attach File", size_hint=(1, 0.2))
+        file_btn.bind(on_press=self.select_file)
 
-    def draw_rotating_arcs(self, painter, x, y, radius, thickness, segments, angle_offset, color, gap):
-        # Rotating arcs with finer gaps and better spacing control
-        painter.setPen(QPen(color, thickness, Qt.SolidLine, Qt.RoundCap))
-        segment_angle = 360 / segments
-        arc_length = segment_angle - gap
+        # Send Button
+        send_btn = Button(text="Send Email", size_hint=(1, 0.2))
+        send_btn.bind(on_press=self.send_email)
 
-        for i in range(segments):
-            angle = i * segment_angle + angle_offset
-            rad_angle_start = radians(angle)
-            rad_angle_end = radians(angle + arc_length)
-            start_x = x + radius * cos(rad_angle_start)
-            start_y = y + radius * sin(rad_angle_start)
-            end_x = x + radius * cos(rad_angle_end)
-            end_y = y + radius * sin(rad_angle_end)
+        # Add widgets to popup
+        content.add_widget(Label(text="Send Email", font_size="20sp", size_hint=(1, 0.2)))
+        content.add_widget(self.recipient_input)
+        content.add_widget(self.subject_input)
+        content.add_widget(self.message_input)
+        content.add_widget(file_btn)
+        content.add_widget(send_btn)
 
-            painter.drawLine(start_x, start_y, end_x, end_y)
+        # Create Popup
+        self.email_popup = Popup(title="Email Form", content=content, size_hint=(0.8, 0.8))
+        self.email_popup.open()
 
-    def draw_rotating_dots(self, painter, x, y, radius, segments, angle_offset, color):
-        # Rotating dots inside the middle circle
-        painter.setPen(QPen(color, 2, Qt.SolidLine, Qt.RoundCap))
-        segment_angle = 360 / segments
+    def select_file(self, instance):
+        filechooser = FileChooserIconView()
+        popup = Popup(title="Select a file", content=filechooser, size_hint=(0.9, 0.9))
+        
+        def on_file_selection(*args):
+            self.file_path = filechooser.selection[0] if filechooser.selection else None
+            popup.dismiss()
+        
+        filechooser.bind(on_submit=on_file_selection)
+        popup.open()
 
-        for i in range(segments):
-            angle = i * segment_angle + angle_offset
-            rad_angle = radians(angle)
-            start_x = x + radius * cos(rad_angle)
-            start_y = y + radius * sin(rad_angle)
-            painter.drawEllipse(start_x - 5, start_y - 5, 10, 10)  # Smaller rotating dots
+    def send_email(self, instance):
+        # Fetch data
+        recipient = self.recipient_input.text
+        subject = self.subject_input.text
+        message = self.message_input.text
 
-    def draw_glowing_center(self, painter, x, y, radius, glow_color):
-        # Increased glow intensity for central effect
-        gradient = QRadialGradient(x, y, radius)
-        gradient.setColorAt(0, glow_color)
-        gradient.setColorAt(1, Qt.transparent)
-        painter.setBrush(QBrush(gradient))
-        painter.setPen(Qt.NoPen)
-        painter.drawEllipse(x - radius, y - radius, 2 * radius, 2 * radius)
+        # Check required fields
+        if not recipient or not subject or not message:
+            self.update_conversation("All fields are required!")
+            return
 
-# Main execution
-app = QApplication(sys.argv)
-window = FuturisticAnimation()
-window.show()
-sys.exit(app.exec_())
+        # Email sending in a separate thread
+        def email_thread():
+            try:
+                sender_email = "sigdelprabin321@gmail.com"
+                password = "omet osmk kavu tlrw"
+
+                # Email Setup
+                email_message = MIMEMultipart()
+                email_message["From"] = sender_email
+                email_message["To"] = recipient
+                email_message["Subject"] = subject
+                email_message.attach(MIMEText(message, "plain"))
+
+                # File attachment
+                if self.file_path:
+                    with open(self.file_path, "rb") as attachment:
+                        part = MIMEBase("application", "octet-stream")
+                        part.set_payload(attachment.read())
+                    encoders.encode_base64(part)
+                    part.add_header("Content-Disposition", f"attachment; filename={os.path.basename(self.file_path)}")
+                    email_message.attach(part)
+
+                # SMTP Connection
+                server = smtplib.SMTP("smtp.gmail.com", 587)
+                server.starttls()
+                server.login(sender_email, password)
+                server.sendmail(sender_email, recipient, email_message.as_string())
+                server.quit()
+
+                Clock.schedule_once(lambda dt: self.update_conversation("Email sent successfully!"))
+
+            except Exception as e:
+                Clock.schedule_once(lambda dt: self.update_conversation(f"Failed to send email: {str(e)}"))
+
+        threading.Thread(target=email_thread, daemon=True).start()
+        self.email_popup.dismiss()
+
+    def update_conversation(self, text):
+        label = self.root.get_screen("main").ids.conversation_label
+        label.text += f"\n{text}"
+        label.height = label.texture_size[1]
+
+    def clear_conversation(self):
+        label = self.root.get_screen("main").ids.conversation_label
+        label.text = "Jarvis: Hello! How can I assist you today?"
+
+if __name__ == "__main__":
+    JarvisApp().run()

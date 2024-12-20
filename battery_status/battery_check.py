@@ -17,4 +17,4 @@ def battey_persentage():
             minutes, _ = divmod(remainder, 60)
             time_left_message = f"if you normally use your device then you will be able to use about: {hours} hours and {minutes} minutes sir."
             speak(time_left_message)
-        return f"You have percent{percent}in your device{time_left_message}"
+        return f"You have {percent}percent in your device {time_left_message}"

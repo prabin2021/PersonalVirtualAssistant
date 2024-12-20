@@ -25,7 +25,7 @@ from data_required.dataforNLP import *
 from mtranslate import translate
 import threading
 import logging
-
+import types
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('rate', 170)
@@ -281,41 +281,93 @@ def mind(text,response_check):
     response_done = response_check
     
     if response_done == False:
-        answer = get_answer(text, dataset)
+        answer = get_answer(text, dataset)  # Possible generator function
+        if isinstance(answer, types.GeneratorType):  # Check if it's a generator
+            answer = "".join(answer)  # Consume generator to a single string
         return answer
     else:
-        return
+        return None
 
-def main2():
-        # remind_last_activity()  
+# def main2():
+#         # remind_last_activity()  
+#     while True:
+#         facestatus = faceverify(status="True")
+#         if facestatus:
+#             greet_user()
+#             while True:
+#                 user_input = take_user_input()
+#                 if user_input:
+#                     result_query,response_check = handle_query(user_input)
+#                     result_mind = mind(user_input,response_check)
+#                     if result_mind == "exit":
+#                         break
+#                 else:
+#                     continue
+#                 return result_query,result_mind
+#         else:
+#             speak("Face not verified. Please try again.")
+#         response_check = False
+#         return None, "Face not verified"
+
+# def main2():
+#     interactions = []
+#     retry_limit = 3
+#     retry_count = 0
+
+#     while retry_count < retry_limit:
+#         facestatus = faceverify(status="True")
+#         if facestatus:
+#             greet_user()
+#             while True:
+#                 user_input = take_user_input()
+#                 if user_input:
+#                     interactions.append(("User", user_input))
+#                     result_query, response_check = handle_query(user_input)
+#                     result_mind = mind(user_input, response_check)
+#                     if result_query:
+#                         interactions.append(("Jarvis", result_query))
+#                     elif result_mind:
+#                         interactions.append(("Jarvis", result_mind))
+#                     if result_mind == "exit":
+#                         interactions.append(("Jarvis", "Goodbye!"))
+#                         break
+#                 else:
+#                     continue
+#                 return interactions
+            
+#         else:
+#             retry_count += 1
+#             speak("Face not verified. Please try again.")
+#             interactions.append(("Jarvis", "Face verification failed. Please try again."))
+#         return interactions
+
+def main():
     while True:
-        facestatus = faceverify(status="True")
-        if facestatus:
-            greet_user()
-            while True:
-                user_input = take_user_input()
-                if user_input:
-                    result_query,response_check = handle_query(user_input)
-                    result_mind = mind(user_input,response_check)
-                    if result_mind == "exit":
-                        break
-                else:
-                    continue
+        user_input = take_user_input()
+        if user_input:
+            # Send the user's input as an interaction
+            yield "User", user_input
+            
+            # Process the input
+            result_query, response_check = handle_query(user_input)
+            result_mind = mind(user_input, response_check)
+            
+            # Send Jarvis's response (query or mind)
+            if result_query:
+                yield "Jarvis", result_query
+            elif result_mind:
+                yield "Jarvis", result_mind
+            
+            # Handle exit condition
+            if result_mind == "exit":
+                yield "Jarvis", "Goodbye!"
+                break
         else:
-            speak("Face not verified. Please try again.")
-        response_check = False
+            continue
 
-def main():    
-        while True:
-            user_input = take_user_input()
-            if user_input:
-                result_query,response_check = handle_query(user_input)
-                result_mind = mind(user_input,response_check)
-                if result_mind == "exit":
-                    break
-            else:
-                continue
-            response_check = False
+        # response_check = False
+        # return interactions
+        
 
 if __name__ == "__main__":
     status = activate_assistant()
