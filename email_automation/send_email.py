@@ -83,8 +83,8 @@
 #                 return
 #             if message_done:
 #             # Your email credentials and SMTP server details
-#                 sender_email = "sigdelprabin321@gmail.com"
-#                 ohoo = "omet osmk kavu tlrw"
+#                 sender_email = "Your email"
+#                 ohoo = "Your email specific password"
 #                 smtp_server = "smtp.gmail.com"
 #                 smtp_port = 587  # or 465 for SSL
 #                 # Create MIMEMultipart message
