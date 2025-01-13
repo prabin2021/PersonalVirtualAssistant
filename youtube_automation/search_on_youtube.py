@@ -27,7 +27,7 @@ def open_youtube():
             userquery = take_user_input()
             youtube_searched = False
             if userquery == "exit":
-                return 
+                return "Exit command detected"
             start_keywords = ["i want","search for","search","for"," seek for","look for", "find", "find me","search that", "about","search about","show me","watch","i need","i want to","play","can you play"]
             for keyword in start_keywords:
                 if keyword in userquery:
@@ -36,9 +36,10 @@ def open_youtube():
                         youtube_searched = True
         except sr.RequestError:
             speak("Sorry, I can't perform this action right now")
+            return "An error occurred:"
         except Exception as e:
-            print("An error occurred:", e)
-        return userquery
+            return "An error occurred:", e
+        return "Youtube opened"
 def search_youtube(query):
             from main import speak
             try:
@@ -55,4 +56,4 @@ def search_youtube(query):
                 speak("Sorry, I can't perform this action right now")
             except Exception as e:
                 print("An error occurred:", e)
-            return search_query
+            return "For query :", search_query , "youtube search is done"

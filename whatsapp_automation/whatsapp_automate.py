@@ -34,8 +34,9 @@ def open_whatsapp():
         speak("Is this the person whom you want to connect?")
         person = take_user_input()
         if any(keyword in person.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","yep","click")if person is not None):
-            pi.click(x=700, y = 900, clicks = 1, interval =0, button ='left')
+            pi.press("tab")
             time.sleep(1)
+            pi.press("enter")
             speak("Can you say your message sir?")
             message = take_user_input()
             pi.write(message)
@@ -44,13 +45,16 @@ def open_whatsapp():
             if any(keyword in final_ans.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","ok","you can send it","let's go","ok you can","yes you can")if final_ans is not None):
                 pi.press("enter")
                 speak(f"Message sent sucessfully.")
+                return "Whatsapp message sent sucessfully"
             else:
                 speak("Ok sir, message discarded.")
+                return "Whatsapp message discarded"
         else:
             speak("Sorry sir, I couldn't find the person. You can search manually from here.")
-
+            return "Whatsapp Opened"
     else:
         speak("Ok as your wish sir.")
+        return "Whatsapp Opened"
 
 def send_whatsapp_message():
     from main import speak
@@ -85,21 +89,26 @@ def send_whatsapp_message():
         speak("Is this the person whom you want to connect with?")
         person = take_user_input()
         if any(keyword in person.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","yep","click","you can","right")if person is not None):
-            pi.click(x=700, y = 900, clicks = 1, interval =0, button ='left')
+            pi.press("tab")
             time.sleep(1)
+            pi.press("enter")
             speak("Can you say your message sir?")
             message = take_user_input()
             pi.write(message)
             speak("Can i send it sir?")
             final_ans = take_user_input()
-            if any(keyword in final_ans.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","ok")if final_ans is not None):
+            if any(keyword in final_ans.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","yep","click","you can","right")if final_ans is not None):
                 pi.press("enter")
                 speak(f"Message sent sucessfully.")
+                return "Whatsapp message sent sucessfully"
             else:
                 speak("Ok sir, message discarded.")
+                return "Whatsapp message discarded"
         else:
             speak("Sorry sir, I couldn't find the person. You can search manually from here.")
+            return "Whatsapp Opened"
 
     else:
-        speak("Ok as your wish sir.")
+        speak("Sorry sir, I couldn't find the person. You can search manually from here.")
+        return "Automation of message sending  discarded"
 

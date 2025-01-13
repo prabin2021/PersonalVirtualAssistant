@@ -20,6 +20,14 @@ def load_last_activity():
             data = json.load(file)
             return data.get("last_activities",[])
     return []
+def say_last_activity():
+    from main import speak
+    last_activities = load_last_activity()
+    if last_activities:
+        speak("Sir, last time we were working on the following activities:")
+        for i, activity in enumerate(last_activities):
+            speak(f"{i + 1}: {activity}")
+        return last_activities
 
 def remind_last_activity():
     from main import speak,take_user_input
@@ -29,10 +37,10 @@ def remind_last_activity():
         speak("Sir, last time we were working on the following activities:")
         for i, activity in enumerate(last_activities):
             speak(f"{i + 1}: {activity}")
-        speak(f"Would you like to continue any of them?")
+        speak(f"Which activity would you like to continue?")
         user_input = take_user_input()
         if user_input:
-            if any(keyword in user_input.lower() for keyword in ("yeah","sure","ok","yes","okay","you can start","take me to","continue with")):
+            if any(keyword in user_input.lower() for keyword in ("yeah","sure","ok","yes","okay","you can start","take me to","can you continue","continue with")):
                 while True:
                     number = extract_number_from_command(user_input)
                     if number is not None:
@@ -41,13 +49,12 @@ def remind_last_activity():
                             chosen_activity = last_activities[chosen_index]
                             switch_to_activity(chosen_activity)
                             speak(f"Continuing with {chosen_activity}")
-                            break
+                            return "Switched to your previous activity"
                         else:
                             speak("Invalid number. Please try again.")
                             user_input = take_user_input()
                     else:
                         speak("I didn't understand. Please say the number of the activity.")
-                        
                         user_input = take_user_input()
             
 

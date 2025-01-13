@@ -95,7 +95,7 @@ commands = {
         "compose email", "write an email", "draft a mail", "email someone", "send a message via email","send an email", "send a mail", "e-mail someone", "dispatch an email", "send email to","help me to send email"
     ],
     "tell_joke": [
-        "make me giggle", "say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh"
+        "make me giggle","i want to laugh" ,"say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh", "can you make me laugh"
     ],
     "translate_text": [
         "interpret this text", "convert text to another language", "translate this content", "switch the language", "language conversion","translate the text", "convert the text","change the text","change this sentence into another language", "translate the words into another language", "can you convert ", "can you translate this", "convert these sentences","convert this sentences into another language", "translate these sentences"
@@ -144,7 +144,7 @@ commands = {
         "shut this window", "terminate this screen", "dismiss the window", "close this tab","close the window", "can you close this window", "close current window", "please close the screen", "remove this window", " close this window"
     ],
     "tell_time": [
-        "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time", "i need the time"
+        "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time", "i need the time","i want to know time"
     ],
     "check_weather": [
         "weather today", "forecast please", "is it sunny", "rain or shine", "current conditions","what's the weather", "check the weather", "tell me the weather",
@@ -152,4 +152,5 @@ commands = {
         "current weather", "weather report", "show me the weather"
 ]
 }
+
 

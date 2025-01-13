@@ -9,9 +9,32 @@ def speak1(target_languag, translated_text):
 def translate_text(query):
     from main import speak,take_user_input
     from mtranslate import translate 
-    start_keywords = ["translate the word", "translate the words", "translate words", "convert the words","change the words", "translate the texts", "translate the text", "translate text","translate this sentence","translate these sentences",
-                      "translate this line","translate these words","convert these words","convert this word",
-                      "change this line", "change these lines", "change words","translate text","translate that","translate it","translate texts","translate this line","convert this line","translate these lines","translate","translate the sentence"]
+    start_keywords = [
+                    "translate the word", "translate the words", "translate words", "convert the words",
+                    "change the words", "translate the texts", "translate this text", "translate text",
+                    "translate this sentence", "translate these sentences", "translate this line", "translate these words",
+                    "convert these words", "convert this word", "change this line", "change these lines",
+                    "change words", "translate that", "translate it", "translate texts", "convert this line",
+                    "translate these lines", "translate", "translate the sentence", "convert sentence",
+                    "convert sentences", "translate into another form", "translate this word",
+                    "change to another form", "translate this content", "convert the paragraph",
+                    "convert paragraphs", "translate paragraphs", "translate a word", "translate this phrase",
+                    "translate phrases", "change the text", "convert the text", "convert the content",
+                    "translate this", "translate that", "convert it", "convert the message",
+                    "turn this into a different style", "translate the phrase", "transform this content",
+                    "convert this into something else", "change the structure", "translate the passage",
+                    "convert this to a new form", "change this expression", "turn this into new words",
+                    "translate and rewrite", "convert and rewrite", "translate into a different format",
+                    "convert this input", "transform the paragraph",
+                    "change the phrase", "reword this text", "adjust these sentences",
+                    "interpret this text", "rewrite in another way", "make this into new sentences",
+                    "change the paragraph", "translate the input", "rephrase this content",
+                    "convert words to another language", "translate my input", "convert to another language",
+                    "interpret this", "transform this line", "translate these lines",
+                    "rephrase the input", "transform and rewrite", "make this into something else",
+                    "adjust the wording", "turn this sentence into another form"
+]
+
     languages = {
         "english": "en", "mandarin": "zh", "spanish": "es", "hindi": "hi", "arabic": "ar",
         "portuguese": "pt", "bengali": "bn", "russian": "ru", "japanese": "ja", "punjabi": "pa",
@@ -63,14 +86,14 @@ def translate_text(query):
                 target_languag = languages[wordss]
         if not target_languag:
             speak("Sorry sir, I am not trained to translate in the language that you want to translate in.")
-            return
-        print("Selected Language: ", target_languag)
+            return "Sorry sir, I am not trained to translate in the language that you want to translate in."
+        speak("Selected Language is ", target_languag)
         translated_text = translate(search_query,target_languag)
         print("Texts to translate: ",search_query)
-        print(f"Translated text is  {translated_text}")
+        speak1(target_languag, translated_text)
+        return(f"Translated text is  {translated_text}")
     except Exception as e:
         speak("Sorry I could not perform this action now.")
-        return
+        return "Sorry I could not perform this action now."
     
-    speak1(target_languag, translated_text)
 

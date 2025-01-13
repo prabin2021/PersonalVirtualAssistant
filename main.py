@@ -22,6 +22,7 @@ from last_activity_automation.last_actitivty_track import *
 from Face_Verification.face_samples.newfaceverify import *
 from Face_Verification.face_samples.takesample import *
 from data_required.dataforNLP import *
+import tkinter as tk
 from mtranslate import translate
 import threading
 import logging
@@ -63,20 +64,20 @@ def take_user_input():
         recognizer.sample_rate = 48000
         recognizer.dynamic_energy_threshold = True
         recognizer.non_speaking_duration = 0.5
-        audio = recognizer.listen(source,5,10)
+        audio = recognizer.listen(source,150,10)
     query = None
     try:
-        print("Trying to recognize as English language...")         
-        query1 = recognizer.recognize_google(audio, language="en")
-        print("You said:",query1)
-        query= query1.lower()
+        print("Trying to recognize as Nepali language...")   
+        query1 = recognizer.recognize_google(audio, language="ne")
+        query_translated = translate(query1,to_language="en")
+        print("You said:",query_translated)
+        query = query_translated.lower()
     except sr.UnknownValueError:
         try:           
-            print("Trying to recognize as Nepali language...")   
-            query1 = recognizer.recognize_google(audio, language="ne")
-            query_translated = translate(query1,to_language="en")
-            print("You said:",query_translated)
-            query = query_translated.lower()
+            print("Trying to recognize as English language...")         
+            query1 = recognizer.recognize_google(audio, language="en")
+            print("You said:",query1)
+            query= query1.lower()
         except sr.UnknownValueError:
             print("Unable to recognize...")
             return None
@@ -148,35 +149,10 @@ def check_status(query):
             if sentiment == 'NEGATIVE' and confidence > 0.7:
                 speak("I sense some negativity in your voice. Is everything alright sir?")
             sentiment_checked = True
+            return f"Your Sentiment: {sentiment}, Your Confidence: {confidence:.2f}"
+    else:
+        return None
 
-intent_to_function = {
-    "open_email": send_email,
-    "send_whatsapp_message":send_whatsapp_message,
-    "open_whatsapp": open_whatsapp,
-    "open_command_prompt": open_cmd,
-    "open_camera": open_camera,
-    "capture_photo": capture_photo,
-    "open_notepad": open_notepad,
-    "jarwis_status_sleep":lambda _: toggle_jarwis_mode("sleep"),
-    "jarwis_status_wakeup":lambda _: toggle_jarwis_mode("wakeup"),
-    # "open_facebook": open_facebook,
-    "send_email": send_email,
-    "tell_joke": tell_random_joke,
-    "translate_text":lambda query: translate_text(query),
-    "open_google": open_google,
-    "search_wikipedia":lambda query: get_wikipedia_summary(query),
-    "search_google":lambda query: search_google(query),
-    "open_youtub": open_youtube,
-    "search_youtube":lambda query: search_youtube(query),
-    "check_battery": battey_persentage,
-    "previous_activities": remind_last_activity,
-    "minimize_window": minimize_screen,
-    "maximize_window": maximize_screen,
-    "close_window":close_window,
-    "tell_time":tell_time,
-    "exit":exit,
-
-}
 def advance_tokenize(text):
     tokens = re.findall(r"\b\w+(?:'\w+)?\b|\d+", text.lower())
     return tokens
@@ -248,6 +224,7 @@ for entry in dataset:
 tfidf_vectors_command = compute_tfidf(corpus)
 
 def get_answer(query,dataset):
+    from data_required.intenstmatching import intent_to_function
     global listening
     try:
         query1 = query
@@ -309,73 +286,101 @@ def mind(text,response_check):
 #         response_check = False
 #         return None, "Face not verified"
 
-# def main2():
-#     interactions = []
-#     retry_limit = 3
-#     retry_count = 0
+def main2():
+    # root = tk.Tk()
+    # ui_instance = JarvisUI(root)
+    # root.mainloop()
+    interactions = []
+    retry_limit = 3
+    retry_count = 0
 
-#     while retry_count < retry_limit:
-#         facestatus = faceverify(status="True")
-#         if facestatus:
-#             greet_user()
-#             while True:
-#                 user_input = take_user_input()
-#                 if user_input:
-#                     interactions.append(("User", user_input))
-#                     result_query, response_check = handle_query(user_input)
-#                     result_mind = mind(user_input, response_check)
-#                     if result_query:
-#                         interactions.append(("Jarvis", result_query))
-#                     elif result_mind:
-#                         interactions.append(("Jarvis", result_mind))
-#                     if result_mind == "exit":
-#                         interactions.append(("Jarvis", "Goodbye!"))
-#                         break
-#                 else:
-#                     continue
-#                 return interactions
-            
-#         else:
-#             retry_count += 1
-#             speak("Face not verified. Please try again.")
-#             interactions.append(("Jarvis", "Face verification failed. Please try again."))
-#         return interactions
+    while retry_count < retry_limit:
+        facestatus = faceverify(status="True")
+        if facestatus:
+            greet_user()
+            say_last_activity()
+            activity_thread = threading.Thread(target=monitor_activities)
+            activity_thread.daemon = True
+            activity_thread.start()
+            while True:
+                user_input = take_user_input()  # Assuming this method gets new input
+                if user_input:
+                    userstatus = check_status(user_input)
+                    if userstatus :
+                        interactions.append(("Jarvis", userstatus))
+                        yield "Jarvis", userstatus  
+                    interactions.append(("User", user_input))
+                    # Yield after the user input to display it in the UI
+                    yield "User", user_input
+                    
+                    # Process the user's input (query and mind)
+                    result_query, response_check = handle_query(user_input)
+                    result_mind = mind(user_input, response_check)
 
-def main():
-    while True:
-        user_input = take_user_input()
-        if user_input:
-            # Send the user's input as an interaction
-            yield "User", user_input
-            
-            # Process the input
-            result_query, response_check = handle_query(user_input)
-            result_mind = mind(user_input, response_check)
-            
-            # Send Jarvis's response (query or mind)
-            if result_query:
-                yield "Jarvis", result_query
-            elif result_mind:
-                yield "Jarvis", result_mind
-            
-            # Handle exit condition
-            if result_mind == "exit":
-                yield "Jarvis", "Goodbye!"
-                break
+                    if result_query:
+                        interactions.append(("Jarvis", result_query))
+                        yield "Jarvis", result_query  # Yield Jarvis's response
+                    elif result_mind:
+                        interactions.append(("Jarvis", result_mind))
+                        yield "Jarvis", result_mind  # Yield Jarvis's response
+
+                    # Check if the user wants to exit
+                    if result_mind == "exit":
+                        interactions.append(("Jarvis", "Goodbye!"))
+                        yield "Jarvis", "Goodbye!"  # Yield exit message
+                        break
+                else:
+                    continue
+
         else:
-            continue
+            retry_count += 1
+            speak("Face not verified. Please try again.")
+            interactions.append(("Jarvis", "Face verification failed. Please try again."))
+            yield "Jarvis", "Face verification failed. Please try again."
+    
+    # Once retry limit is reached, finish interaction
+    # yield "Jarvis", "Face verification attempts exceeded."
+    # interactions.append(("Jarvis", "Face verification attempts exceeded. Program will exit now."))
+    # return interactions  # Return after retry limit is reached
+    # # if retry_count ==3:
+    return "exit"
+
+
+# def main():
+#     while True:
+#         user_input = take_user_input()
+#         if user_input:
+#             # Send the user's input as an interaction
+#             yield "User", user_input
+            
+#             # Process the input
+#             result_query, response_check = handle_query(user_input)
+#             result_mind = mind(user_input, response_check)
+            
+#             # Send Jarvis's response (query or mind)
+#             if result_query:
+#                 yield "Jarvis", result_query
+#             elif result_mind:
+#                 yield "Jarvis", result_mind
+            
+#             # Handle exit condition
+#             if result_mind == "exit":
+#                 yield "Jarvis", "Goodbye!"
+#                 break
+#         else:
+#             continue
 
         # response_check = False
         # return interactions
         
 
-if __name__ == "__main__":
-    status = activate_assistant()
-    if status == True:
-        facestatus =faceverify(status)
-        if facestatus:
-            greet_user()
-            main()
-        else:
-            speak("Face not verified")
+# if __name__ == "__main__":
+#     status = activate_assistant()
+#     if status == True:
+#         facestatus =faceverify(status)
+#         if facestatus:
+#             greet_user()
+#             main()
+#         else:
+#             speak("Face not verified")
             

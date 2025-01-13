@@ -40,6 +40,9 @@ def verifyface():
     encodings_dir = "D:/New_Virtual_Assistant/Face_Verification"
     # Initialize video capture
     video_capture = cv2.VideoCapture(0)
+      # Use index 0 for the default camera
+    if not video_capture.isOpened():
+        return "Error: Could not open camera."
     # Load encodings and names
     encodings, names = load_all_encodings(encodings_dir)
     print("Loading face encodings...")

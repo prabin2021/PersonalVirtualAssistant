@@ -20,8 +20,8 @@ def get_wikipedia_summary(query):
     try:
         results = wikipedia.summary(query,sentences=3)
         speak("According to wikipedia")
-        print(results)
         speak(results)
+        return "According to wikipedia: ", results
     except Exception as e:
         speak("Unable to find from wikipedia sir, can you modify your question pattern again?")
 

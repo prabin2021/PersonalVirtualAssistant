@@ -7,9 +7,14 @@ def greet_user():
         current_hour = datetime.now().hour
         if 1 <= current_hour < 12:
             speak(random.choice(good_morning_dlg))
+            return good_morning_dlg
         elif 12 <= current_hour < 16:
             speak(random.choice(good_afternoon_dlg))
+            return good_afternoon_dlg
         elif 16 <= current_hour < 21:
             speak(random.choice(good_evening_dlg))
+            return good_evening_dlg
         else:
-            speak("Hello, sir! I am Jarwis,your virtual assistant. How may I assist you today?")
+            dialogue = "Hello, sir! I am Jarwis,your virtual assistant. How may I assist you today?"
+            speak(dialogue)
+            return dialogue
