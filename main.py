@@ -265,7 +265,7 @@ def mind(text,response_check):
     else:
         return None
 
-# def main2():
+# def main3():
 #         # remind_last_activity()  
 #     while True:
 #         facestatus = faceverify(status="True")
@@ -374,6 +374,7 @@ def main2():
         # return interactions
         
 
+<<<<<<< HEAD
 # if __name__ == "__main__":
 #     status = activate_assistant()
 #     if status == True:
@@ -384,3 +385,15 @@ def main2():
 #         else:
 #             speak("Face not verified")
             
+=======
+if __name__ == "__main__":
+    status = activate_assistant()
+    if status == True:
+        facestatus =faceverify(status)
+        if facestatus:
+            greet_user()
+            main()
+        else:
+            speak("Face not verified")
+            
+>>>>>>> cd3e31c6b8d3c900ea7a4e7f097b5d49f3a7f31f
