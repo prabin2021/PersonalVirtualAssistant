@@ -1,7 +1,8 @@
  
 from gtts import gTTS
 import os
-def speak1(target_languag, translated_text):
+import re
+def tell(target_languag, translated_text):
     combined_text = f"Your translated text is {translated_text}"
     tts = gTTS(combined_text, lang=target_languag) # Use 'ne' for Nepali
     tts.save("temp.mp3")
@@ -10,13 +11,13 @@ def translate_text(query):
     from main import speak,take_user_input
     from mtranslate import translate 
     start_keywords = [
-                    "translate the word", "translate the words", "translate words", "convert the words",
-                    "change the words", "translate the texts", "translate this text", "translate text",
+                    "translate the word", "translate the words", "translate words", "convert the words","translate a text"
+                    "change the words", "translate the texts", "translate this text", "translate text","translate the text",
                     "translate this sentence", "translate these sentences", "translate this line", "translate these words",
-                    "convert these words", "convert this word", "change this line", "change these lines",
+                    "convert these words", "convert this word", "change this line", "change these lines","convert this words",
                     "change words", "translate that", "translate it", "translate texts", "convert this line",
                     "translate these lines", "translate", "translate the sentence", "convert sentence",
-                    "convert sentences", "translate into another form", "translate this word",
+                    "convert sentences", "translate into another form", "translate this word","change these words"
                     "change to another form", "translate this content", "convert the paragraph",
                     "convert paragraphs", "translate paragraphs", "translate a word", "translate this phrase",
                     "translate phrases", "change the text", "convert the text", "convert the content",
@@ -25,14 +26,14 @@ def translate_text(query):
                     "convert this into something else", "change the structure", "translate the passage",
                     "convert this to a new form", "change this expression", "turn this into new words",
                     "translate and rewrite", "convert and rewrite", "translate into a different format",
-                    "convert this input", "transform the paragraph",
-                    "change the phrase", "reword this text", "adjust these sentences",
+                    "convert this input", "transform the paragraph","Change these words","change this text",
+                    "change the phrase", "reword this text", "adjust these sentences","change this word",
                     "interpret this text", "rewrite in another way", "make this into new sentences",
                     "change the paragraph", "translate the input", "rephrase this content",
                     "convert words to another language", "translate my input", "convert to another language",
                     "interpret this", "transform this line", "translate these lines",
                     "rephrase the input", "transform and rewrite", "make this into something else",
-                    "adjust the wording", "turn this sentence into another form"
+                    "adjust the wording", "turn this sentence into another form","translate it","convert it","translate"
 ]
 
     languages = {
@@ -59,6 +60,7 @@ def translate_text(query):
         "breton": "br", "welsh": "cy", "irish": "ga", "scots gaelic": "gd", "nepali":"ne"
     } 
     query_lower = query.lower().strip()
+    query_lower = re.sub(r"[.?!]", "", query_lower)
     words = query_lower.split()
     i = 0
     while i < len(words):
@@ -79,7 +81,8 @@ def translate_text(query):
     try:
         search_query = " ".join(words).strip()
         speak("can you say the language that you want to translate in?")
-        target_language = take_user_input().lower().split()
+        target_language = take_user_input()
+        target_language = target_language.lower().split()
         target_languag = ""
         for i, wordss in enumerate(target_language):
             if wordss in languages:
@@ -87,13 +90,13 @@ def translate_text(query):
         if not target_languag:
             speak("Sorry sir, I am not trained to translate in the language that you want to translate in.")
             return "Sorry sir, I am not trained to translate in the language that you want to translate in."
-        speak("Selected Language is ", target_languag)
+        speak(f"Selected Language is {target_languag}")
         translated_text = translate(search_query,target_languag)
         print("Texts to translate: ",search_query)
-        speak1(target_languag, translated_text)
+        tell(target_languag, translated_text)
         return(f"Translated text is  {translated_text}")
     except Exception as e:
         speak("Sorry I could not perform this action now.")
-        return "Sorry I could not perform this action now."
+        return f"Sorry I could not perform this action now due to error: ",e
     
 

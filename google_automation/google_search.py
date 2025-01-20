@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 def search_google(query):
     from main import speak
     start_keywords = ["search for","search for the topic","search for the name","search for the title","search" ,"look for", "find that", "find out"," information about","idea about" "search about", "show me", "watch", "search that", "tell me","search",
-                      "give me the idea about","google that","google search that","my query is","my question is","for","about","find"]
+                      "give me the idea about","give me idea about","google that","google search that","my query is","my question is","for","about","find"]
     words = query.lower().split()
     search_query = ""
     for i, word in enumerate(words):
@@ -15,7 +15,7 @@ def search_google(query):
     print(search_query)
 
     if not search_query:
-        speak("Please specify what you want to search for.")
+        speak("Please specify properly what you want to search for.")
         return
 
     kit.search(search_query)

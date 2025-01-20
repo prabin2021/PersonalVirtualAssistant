@@ -1,25 +1,26 @@
-from tkinter import Tk, Label, Button, Text, Frame, Toplevel,PhotoImage, END
+from tkinter import Tk, Label, Button, Text,Entry, Frame, Toplevel,PhotoImage, END
 from datetime import datetime
 import threading
-import time
 import sys
 import os
-from PIL import Image, ImageTk  
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from main import main2
+from main import main2,main3
 class JarvisUI:
   
     def __init__(self, root,intent_callback = None):
         self.root = root
+        icon = PhotoImage(file="D:/New_Virtual_Assistant/logo.png")  # Replace with your image file path
+        self.root.wm_iconphoto(True, icon)
         self.intent_callback = intent_callback
         self.root.title("Jarvis - Personal Assistant")
-        self.root.geometry("1100x940")
+        self.root.geometry("1150x950")
         self.root.configure(bg="#1c1c1c")
         self.current_input = ""
         self.is_active = False
         self.conversation = []
-         # === Added: Load GIF image ===
-        self.gif_image_path = "D:/New_Virtual_Assistant/QNBH.gif"  # Replace with your GIF path
+        # === Added: Load GIF image ===
+        self.gif_image_path = "D:/New_Virtual_Assistant/jarvis.gif"
         self.gif_image = None
         if os.path.exists(self.gif_image_path):
             self.gif_image = PhotoImage(file=self.gif_image_path)  # Load the GIF image
@@ -28,7 +29,7 @@ class JarvisUI:
         self.header_frame.pack(fill="x", side="top")
 
         self.title_label = Label(
-            self.header_frame, text="Jarvis Assistant", font=("Arial", 24, "bold"), fg="#00FF7F", bg="#292929"
+            self.header_frame, text="Personal Assistant", font=("Consolas", 24, "bold"), fg="#00FF7F", bg="#292929",
         )
         self.title_label.pack(pady=7)
 
@@ -39,7 +40,7 @@ class JarvisUI:
         self.update_time()
 
         # Conversation Area
-        self.conversation_frame = Frame(self.root, bg="#1c1c1c")
+        self.conversation_frame = Frame(self.root, bg="#1c1c1c", bd=2,relief="solid", highlightbackground="RED", highlightthickness=2)
         self.conversation_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.conversation_display = Text(
@@ -47,44 +48,29 @@ class JarvisUI:
         )
         self.conversation_display.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Input and Controls
-        self.controls_frame = Frame(self.root, bg="#292929")
-        self.controls_frame.pack(fill="x", side="bottom")
-
-        self.input_text = Text(
-            self.controls_frame, height=3, font=("Courier New", 12), bg="#1c1c1c", fg="white"
-        )
-        self.input_text.pack(side="left", fill="both", expand=True, padx=10, pady=10)
-
-        self.send_button = Button(
-            self.controls_frame, text="Send", font=("Arial", 12, "bold"), bg="#00FF7F", fg="#1c1c1c",
-            command=self.process_user_input
-        )
-        self.send_button.pack(side="right", padx=10, pady=10)
-                # Footer Controls
-        self.footer_frame = Frame(self.root, bg="#292929", height=50)
+        self.footer_frame = Frame(self.root, bg="#292929", height=50 ,bd=2,relief="solid", highlightbackground="RED", highlightthickness=2)
         self.footer_frame.pack(fill="x", side="bottom", pady=5)
 
         self.start_button = Button(
-            self.footer_frame, text="Start", font=("Arial", 12, "bold"), bg="#0078FF", fg="white",
+            self.footer_frame, text="Start", font=("Arial", 12, "bold"), bg="#00FF7F", fg="white",border="10px 100px / 120px 100px",
             command=self.start_jarvis
         )
         self.start_button.grid(row=0, column=0, padx=10, pady=5)
 
         self.stop_button = Button(
-            self.footer_frame, text="Stop", font=("Arial", 12, "bold"), bg="#FF0000", fg="white",
+            self.footer_frame, text="Stop", font=("Arial", 12, "bold"), bg="#FF0000", fg="white",border="10px 100px / 120px 100px",
             command=self.terminate_ui
         )
         self.stop_button.grid(row=0, column=1, padx=10, pady=5)
 
         self.clear_button = Button(
-            self.footer_frame, text="Clear", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",
+            self.footer_frame, text="Clear", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
             command=self.clear_conversation
         )
         self.clear_button.grid(row=0, column=2, padx=10, pady=5)
 
         self.accuracy_button = Button(
-            self.footer_frame, text="Accuracy", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",
+            self.footer_frame, text="Accuracy", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
             command=self.show_accuracy_popup
         )
         self.accuracy_button.grid(row=0, column=3, padx=10, pady=5)
@@ -92,6 +78,25 @@ class JarvisUI:
             self.footer_frame, text="Unactivated", font=("Arial", 12), bg="#292929", fg="red"
         )
         self.status_label.grid(row=0, column=4, padx=10, pady=5)
+        
+        self.password_button = Button(
+            self.footer_frame, text="Password", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
+            command=self.handle_password
+        )
+        self.password_button.grid(row=0, column=5, padx=10, pady=5)
+
+        self.face_button = Button(
+            self.footer_frame, text="Change Face", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
+            command=self.change_face_sample
+        )
+        self.face_button.grid(row=0, column=6, padx=10, pady=5)
+
+        self.terminate_button = Button(
+            self.footer_frame, text="Terminate", font=("Arial", 12, "bold"), bg="#A40000", fg="white",border="10px 100px / 120px 100px",
+            command=sys.exit
+        )
+        self.terminate_button.grid(row=0, column=7, padx=10, pady=5)
+
         if self.gif_image:
             self.add_gif_to_conversation()
 
@@ -139,24 +144,6 @@ class JarvisUI:
 
         self.root.after(500, self.update_time)  # Refresh every 500ms for smooth animation
 
-    def process_user_input(self):
-        # self.update_status("Recognizing...")
-        user_input = self.input_text.get("1.0", END).strip()
-        self.input_text.delete("1.0", END)
-        if user_input:
-            self.add_to_conversation("User", user_input)
-            if user_input.lower() == "terminate":
-                self.add_to_conversation("System", "Program termination requested but UI will remain active.")
-                self.is_active = False
-            else:
-                threading.Thread(target=self.simulate_response, args=(user_input,), daemon=True).start()
-        # self.update_status("Listening")
-    def simulate_response(self, user_input):
-        # Simulating complex logic or API response
-        time.sleep(2)  # Simulate processing delay
-        jarvis_response = f"Jarvis processed: {user_input}"
-        self.add_to_conversation("Jarvis", jarvis_response)
-
     def add_to_conversation(self, sender, message):
         self.conversation.append(f"{sender}: {message}")
         self.conversation_display.config(state="normal")
@@ -173,21 +160,51 @@ class JarvisUI:
             # Start the assistant in a separate thread
             threading.Thread(target=self.run_jarvis, daemon=True).start()
             self.start_button.config(state="disabled")  # Disable Start button while active
-
-
     def run_jarvis(self):
         self.update_status("Activated")
         for speaker, message in main2():
             if not self.is_active:
                 break
             self.add_to_conversation(speaker, message)
-            if speaker == "Jarvis" and message.lower() == "goodbye!":
-                break  # Exit condition
+            if isinstance(message, str) and speaker == "Jarvis" and message.lower() == "goodbye!":
+                break
         self.is_active = False
         self.update_status("Unactivated")
         self.start_button.config(state="normal")
 
-            
+    def start_jarvis2(self):
+        if not self.is_active:
+            self.update_status("Activated")
+            self.is_active = True
+            self.add_to_conversation("System", "Jarvis is now active.")
+            self.remove_gif_from_conversation()
+            # Start the assistant in a separate thread
+            threading.Thread(target=self.run_jarvis2, daemon=True).start()
+            self.start_button.config(state="disabled")  # Disable Start button while active
+    def run_jarvis2(self):
+        self.update_status("Activated")
+        for speaker, message in main3():
+            if not self.is_active:
+                break
+            self.add_to_conversation(speaker, message)
+            if isinstance(message, str) and speaker == "Jarvis" and message.lower() == "goodbye!":
+                break
+        self.is_active = False
+        self.update_status("Unactivated")
+        self.start_button.config(state="normal")
+    def change_face_samples(self):
+        if not self.is_active:
+            self.update_status("Changing face sample")
+            self.remove_gif_from_conversation()
+            self.add_to_conversation("System", "Changing your face samples...")
+            self.add_to_conversation("System", "Please look in camera")
+            # Start the assistant in a separate thread
+            threading.Thread(target=self.change_sample, daemon=True).start()
+    def change_sample(self):
+        from Face_Verification.face_samples.takesample import take_sample
+        take_sample()
+        self.add_to_conversation("System", "Face samples changed sucessfully.")
+        self.update_status("Unactivated")
     def terminate_ui(self):
         if self.is_active:
             self.add_to_conversation("System", "Stopping Jarvis...")
@@ -196,9 +213,8 @@ class JarvisUI:
             self.start_button.config(state="normal")  # Re-enable the Start button
             self.root.after(1000,self.clear_conversation2)
         else:
-            self.add_to_conversation("System", "Jarvis is already stopped.")
+            # self.add_to_conversation("System", "Jarvis is stopped.")
             self.root.after(1000,self.clear_conversation2)
-
 
     def clear_conversation(self):
         self.conversation = []
@@ -229,6 +245,112 @@ class JarvisUI:
             command=popup.destroy
         )
         close_button.pack(pady=10)
+    def custom_hash(self,password):
+                """Custom hashing algorithm to encrypt the password."""
+                hash_value = 0
+                prime = 31  # Use a small prime number for hashing
+
+                # Loop through each character in the password manually
+                position = 1
+                for char in password:
+                    # Calculate ASCII value manually
+                    ascii_value = 0
+                    for byte in char.encode("utf-8"):  # Convert character to its raw byte value
+                        ascii_value += byte
+
+                    # Custom multiplication logic: ASCII value * position * prime
+                    hash_value += ascii_value * position * prime
+                    position += 1
+
+                # Manually convert to hexadecimal
+                hex_result = ""
+                hex_characters = "0123456789abcdef"
+                while hash_value > 0:
+                    remainder = hash_value % 16
+                    hex_result = hex_characters[remainder] + hex_result
+                    hash_value //= 16
+
+                return hex_result
+    
+    def handle_password(self):
+        if not self.is_active:
+            """Handle password verification or setup."""
+            popup = Toplevel(self.root)
+            popup.title("Enter Password")
+            popup.geometry("500x150")
+            popup.configure(bg="#292929")
+
+            Label(popup, text="Enter Password To Proceed:", font=("Arial", 12), bg="#292929", fg="white").pack(pady=10)
+            password_entry = Entry(popup, show="*", font=("Arial", 12), bg="white", fg="black")
+            password_entry.pack(pady=5)
+            
+
+            def check_password():
+                entered_password = password_entry.get()
+                file_path = "D:/New_Virtual_Assistant/Password/password.txt"
+                hashed_entered_password = self.custom_hash(entered_password)
+                if os.path.exists(file_path):
+                    # Check if the password matches
+                    with open(file_path, "r") as file:
+                        stored_password = file.read().strip()
+                        if hashed_entered_password == stored_password:
+                            popup.destroy()
+                            self.clear_conversation()
+                            self.start_jarvis2()  # Call main function
+                            self.add_to_conversation("System", "Password verified! Activating system...")
+                        else:
+                            self.clear_conversation()
+                            self.add_to_conversation("System", "Incorrect password!")
+                else:
+                    with open(file_path, "w") as file:
+                        file.write(hashed_entered_password)
+                    popup.destroy()
+                    self.clear_conversation()
+                    self.start_jarvis2()  # Call main function
+                    self.add_to_conversation("System", "Password set! Activating system...")
+
+            Button(
+                popup, text="Submit", font=("Arial", 12,"bold"), bg="#00FF7F", fg="white", command=check_password
+            ).pack(pady=10)
+    def change_face_sample(self):
+        if not self.is_active:
+            """Handle password verification or setup."""
+            popup = Toplevel(self.root)
+            popup.title("Enter Password To Change Face Samples")
+            popup.geometry("500x150")
+            popup.configure(bg="#292929")
+            Label(popup, text="Enter Password:", font=("Arial", 12), bg="#292929", fg="white").pack(pady=10)
+            password_entry = Entry(popup, show="*", font=("Arial", 12), bg="white", fg="black")
+            password_entry.pack(pady=5)
+
+            def check_password():
+                entered_password = password_entry.get()
+                file_path = "D:/New_Virtual_Assistant/Password/password.txt"
+                hashed_entered_password = self.custom_hash(entered_password)
+                if os.path.exists(file_path):
+                    # Check if the password matches
+                    with open(file_path, "r") as file:
+                        stored_password = file.read().strip()
+                        if hashed_entered_password == stored_password:
+                            popup.destroy()
+                            self.clear_conversation()
+                            self.change_face_samples()
+                        else:
+                            self.clear_conversation()
+                            self.add_to_conversation("System", "Incorrect password!")
+                else:
+                    # Create the file and store the password
+                    with open(file_path, "w") as file:
+                        file.write(hashed_entered_password)
+                    popup.destroy()
+                    self.clear_conversation()
+                    self.change_face_samples()  # Call main function
+
+
+            Button(
+                popup, text="Submit", font=("Arial", 12,"bold"), bg="#00FF7F", fg="white", command=check_password
+            ).pack(pady=10)
+
 
 if __name__ == "__main__":
     root = Tk()

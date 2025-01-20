@@ -2,10 +2,9 @@ import psutil
 
 def battey_persentage():
         from main import speak
-
         battery = psutil.sensors_battery()
         percent = int(battery.percent)
-        speak(f"the device is running on {percent}% battery power")
+        speak(f"The device is running on {percent}% battery power")
         secsleft = battery.secsleft
         time_left_message = ""
         if secsleft == psutil.POWER_TIME_UNLIMITED:

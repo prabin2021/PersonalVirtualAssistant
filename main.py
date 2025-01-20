@@ -265,7 +265,7 @@ def mind(text,response_check):
     else:
         return None
 
-# def main3():
+# def main2():
 #         # remind_last_activity()  
 #     while True:
 #         facestatus = faceverify(status="True")
@@ -287,9 +287,6 @@ def mind(text,response_check):
 #         return None, "Face not verified"
 
 def main2():
-    # root = tk.Tk()
-    # ui_instance = JarvisUI(root)
-    # root.mainloop()
     interactions = []
     retry_limit = 3
     retry_count = 0
@@ -337,12 +334,44 @@ def main2():
             speak("Face not verified. Please try again.")
             interactions.append(("Jarvis", "Face verification failed. Please try again."))
             yield "Jarvis", "Face verification failed. Please try again."
-    
-    # Once retry limit is reached, finish interaction
-    # yield "Jarvis", "Face verification attempts exceeded."
-    # interactions.append(("Jarvis", "Face verification attempts exceeded. Program will exit now."))
-    # return interactions  # Return after retry limit is reached
-    # # if retry_count ==3:
+    return "exit"
+
+def main3():
+    interactions = []
+    greet_user()
+    say_last_activity()
+    activity_thread = threading.Thread(target=monitor_activities)
+    activity_thread.daemon = True
+    activity_thread.start()
+    while True:
+        user_input = take_user_input()  # Assuming this method gets new input
+        if user_input:
+            userstatus = check_status(user_input)
+            if userstatus :
+                interactions.append(("Jarvis", userstatus))
+                yield "Jarvis", userstatus  
+            interactions.append(("User", user_input))
+            # Yield after the user input to display it in the UI
+            yield "User", user_input
+            
+            # Process the user's input (query and mind)
+            result_query, response_check = handle_query(user_input)
+            result_mind = mind(user_input, response_check)
+
+            if result_query:
+                interactions.append(("Jarvis", result_query))
+                yield "Jarvis", result_query  # Yield Jarvis's response
+            elif result_mind:
+                interactions.append(("Jarvis", result_mind))
+                yield "Jarvis", result_mind  # Yield Jarvis's response
+
+            # Check if the user wants to exit
+            if result_mind == "exit":
+                interactions.append(("Jarvis", "Goodbye!"))
+                yield "Jarvis", "Goodbye!"  # Yield exit message
+                break
+        else:
+            continue
     return "exit"
 
 
@@ -374,7 +403,6 @@ def main2():
         # return interactions
         
 
-<<<<<<< HEAD
 # if __name__ == "__main__":
 #     status = activate_assistant()
 #     if status == True:
@@ -385,15 +413,3 @@ def main2():
 #         else:
 #             speak("Face not verified")
             
-=======
-if __name__ == "__main__":
-    status = activate_assistant()
-    if status == True:
-        facestatus =faceverify(status)
-        if facestatus:
-            greet_user()
-            main()
-        else:
-            speak("Face not verified")
-            
->>>>>>> cd3e31c6b8d3c900ea7a4e7f097b5d49f3a7f31f
