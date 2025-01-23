@@ -158,8 +158,8 @@ def send_email():
 
     def send_email_logic(recipient_email, subject, message, file_path):
         try:
-            sender_email = "sigdelprabin321@gmail.com"
-            sender_password = "omet osmk kavu tlrw"
+            sender_email = "Your email"
+            sender_password = "YOue email specific password"
             smtp_server = "smtp.gmail.com"
             smtp_port = 587
 
