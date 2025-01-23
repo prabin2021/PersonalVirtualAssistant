@@ -63,7 +63,7 @@ commands = {
     ],
     "send_whatsapp_message": [
         "send a message on WhatsApp", "WhatsApp this message", "shoot a message on WhatsApp","message someone on WhatsApp", "text on WhatsApp","i want to message through whatsapp"
-        "send WhatsApp message", "WhatsApp message","want to text someone through whatsapp"
+        "send WhatsApp message", "WhatsApp message","want to text someone through whatsapp","send a message in WhatsApp","send a message using WhatsApp"
     ],
     "open_whatsapp": [
         "open WhatsApp", "launch WhatsApp", "start WhatsApp", "access WhatsApp", "can i have whatsapp","i need whatsapp","show whatsapp","initiate WhatsApp", "WhatsApp app please", "where is WhatsApp", "WhatsApp window"
@@ -86,7 +86,7 @@ commands = {
         "take a rest", "pause yourself", "relax for now", "sleep mode", "stay quiet","bro sleep now", "sleep for a while", "don't disturb me for a while", "go away", "keep silent","don't make noise","activate sleep mode","can you sleep","leave me alone for a while"
     ],
     "jarwis_status_wakeup": [
-        "resume work", "ready up", "start your system", "boot up", "active mode","bro wake up now", "wakeup now", "i need you", "stand up please", "bro start up ","can you wake up","raise up bro","let's work together","wake up"
+        "resume work", "ready up", "start your system", "active mode","bro wake up now", "wakeup now", "i need you", "stand up please", "bro start up ","can you wake up","raise up bro","let's work together","wake up"
     ],
     "open_facebook": [
         "facebook app", "social media access", "launch my Facebook", "Facebook login", "start my Facebook","open Facebook", "launch Facebook", "start Facebook", "access Facebook", "use social media","can i have facebook","i need facebook","show my facebook"
@@ -95,19 +95,21 @@ commands = {
         "compose email", "write an email", "draft a mail", "email someone", "send a message via email","send an email", "send a mail", "e-mail someone", "dispatch an email", "send email to","help me to send email"
     ],
     "tell_joke": [
-        "make me giggle","i want to laugh" ,"say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh", "can you make me laugh"
+        "make me giggle","i want to laugh" ,"say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke","tell me another joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh", "can you make me laugh"
     ],
     "translate_text": [
         "interpret this text", "convert text to another language", "translate this content", "switch the language", "language conversion","translate the text", "convert the text","change the text","change this sentence into another language", "translate the words into another language", "can you convert ", "can you translate this", "convert these sentences","convert this sentences into another language", "translate these sentences"
+        "translate the word", "translate the words", "translate words", "convert the words","translate a text","convert words to another language", "translate my input", "convert to another language", "interpret this", "transform this line", "translate these lines",
     ],
     "open_google": [
         "launch search engine", "access Google search", "where's Google", "Google please","open Google", "launch Google", "start Google", "access Google", " want to use Google","show me google","can i have google  ", "i need google"
     ],
     "search_wikipedia": [
         "search in wikipedia", "search for something in wikipedia","find info on Wikipedia", "Wikipedia search for something", "Wikipedia lookup", "fetch from Wikipedia", "Wikipedia article about", "wikipedia search about", "access information about something through wikipedia", "use wikipedia to search for anything"
+        "scrap information about something through wikipedia",
     ],
     "search_google": [
-        "look up on Google", "Google lookup", "find via Google", "Google query", "search engine search","search in Google", "search for something in Google", "google search Google", "access information about something through Google", "use Google to search for anything","using google search for"
+        "look up on Google", "Google lookup", "find via Google", "Google query", "search engine search","search in Google", "search for something in Google", "google search", "access information about something through Google", "use Google to search for anything","using google search for","scrap information using google","find information about something through Google"
     ],
     "open_youtub": [
         "YouTube access", "YouTube app", "start the YouTube", "show me YouTube","open YouTube", "launch YouTube", "start YouTube", "i want YouTube", "show YouTube ","can i have youtube ", "i need youtube", "bring youtube"
@@ -131,11 +133,11 @@ commands = {
         "activity log", "what have I done earlier", "my tasks history", "what were we working on", "previous sessions","show my previous activities","what were my previous works", "what we were doing last time","what we were doing yesterday", " in which project we were working last time", "want to see my previous tasks", "trace my previous works"
     ],
     "exit": [
-        "close the system", "stop now", "terminate the app", "wrap up","exit now","you can exit now", "you can terminate now", " shut the system", "shut down your system", "terminate now", "leave now", "will you leave now"
+        "close the system", "stop now", "terminate the app","terminate yourself", "wrap up","exit now","you can exit now", "you can terminate now", " shut the system", "shut down your system", "terminate now", "leave now", "will you leave now"
     ],
     
     "minimize_window": [
-        "can you minimise this window","reduce window", "hide this window", "make the screen smaller", "move the window down", "lower the window","minimize the window", "can you minimize this window", "minimize my current window", "please minimize the screen", "make the window smaller",
+        "can you minimise this window","reduce window", "hide this window", "make the screen smaller", "move the window down", "lower the window","minimize the window", "can you minimize this screen", "minimize my current window", "please minimize the screen", "make the window smaller","can you minimise this screen"
     ],
     "maximize_window": [
         "make the screen bigger", "can you maximise this window","bring the window up", "expand this window", "maximize the display","maximize the window", "can you maximize this window", "maximize now", "please maximize the screen", "make the window full screen", "expand the window"
@@ -144,7 +146,7 @@ commands = {
         "shut this window", "terminate this screen", "dismiss the window", "close this tab","close the window", "can you close this window", "close current window", "please close the screen", "remove this window", " close this window"
     ],
     "tell_time": [
-        "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time", "i need the time","i want to know time"
+        "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time","i want to know the time"
     ],
     "check_weather": [
         "weather today", "forecast please", "is it sunny", "rain or shine", "current conditions","what's the weather", "check the weather", "tell me the weather",

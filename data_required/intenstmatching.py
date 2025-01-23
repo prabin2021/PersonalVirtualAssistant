@@ -12,6 +12,7 @@ intent_to_function = {
     "send_whatsapp_message":send_whatsapp_message,
     "open_whatsapp": open_whatsapp,
     "open_command_prompt": open_cmd,
+    "open_settings": opensetting,
     "open_camera": open_camera,
     "capture_photo": capture_photo,
     "open_notepad": open_notepad,

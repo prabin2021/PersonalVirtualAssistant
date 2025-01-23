@@ -6,7 +6,7 @@ import pygetwindow as gw
 import time
 
 # File to store the last activity
-LAST_ACTIVITY_FILE = "last_activities.json"
+LAST_ACTIVITY_FILE = "D:/New_Virtual_Assistant/last_activity_automation/last_activities.json"
 
 def save_last_activity(activities):
     """Save the last activity to a file."""

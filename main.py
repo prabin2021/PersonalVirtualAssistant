@@ -19,10 +19,9 @@ from wikipedia_search_automation.wiki_search import *
 from whatsapp_automation.whatsapp_automate import *
 from translate_automation.translate import *
 from last_activity_automation.last_actitivty_track import *
-from Face_Verification.face_samples.newfaceverify import *
-from Face_Verification.face_samples.takesample import *
+from Face_Verification.newfaceverify import *
+from Face_Verification.takesample import *
 from data_required.dataforNLP import *
-import tkinter as tk
 from mtranslate import translate
 import threading
 import logging
@@ -68,8 +67,8 @@ def take_user_input():
     query = None
     try:
         print("Trying to recognize as Nepali language...")   
-        query1 = recognizer.recognize_google(audio, language="ne")
-        query_translated = translate(query1,to_language="en")
+        query_translated = recognizer.recognize_google(audio, language="EN")
+        # query_translated = translate(query1,to_language="en")
         print("You said:",query_translated)
         query = query_translated.lower()
     except sr.UnknownValueError:
@@ -89,44 +88,44 @@ def take_user_input():
     
     return query
 
-def activate_assistant():
+# def activate_assistant():
     
-    speak("Sir, I am your virtual assistant Jarvis. Can I activate, sir?")
-    activate_command = take_user_input()
-    activation_phrases = [
-        "yes bro you can activate",
-        "okay sure",
-        "i need you",
-        "let's work together",
-        "yes",
-        "sure",
-        "off course",
-        "of course",
-        "ofcourse",
-        "go ahead",
-        "activate now",
-        "ok you can",
-        "yes you can",
-        "switch on",
-        "activate and work",
-        "you can start",
-        "let's start",
-        "you can activate",
-    ]
+#     speak("Sir, I am your virtual assistant Jarvis. Can I activate, sir?")
+#     activate_command = take_user_input()
+#     activation_phrases = [
+#         "yes bro you can activate",
+#         "okay sure",
+#         "i need you",
+#         "let's work together",
+#         "yes",
+#         "sure",
+#         "off course",
+#         "of course",
+#         "ofcourse",
+#         "go ahead",
+#         "activate now",
+#         "ok you can",
+#         "yes you can",
+#         "switch on",
+#         "activate and work",
+#         "you can start",
+#         "let's start",
+#         "you can activate",
+#     ]
 
-    if activate_command is None:
-        speak("Assistant not activated. Let me know when you need me, sir.")
-        return False
-    else:
-        if any(phrase in activate_command for phrase in activation_phrases):
-            speak("Activating now with face verification sir!")
-            activity_thread = threading.Thread(target=monitor_activities)
-            activity_thread.daemon = True
-            activity_thread.start()
-            return True
-        else:
-            speak("Unable to understand.")
-            return False
+#     if activate_command is None:
+#         speak("Assistant not activated. Let me know when you need me, sir.")
+#         return False
+#     else:
+#         if any(phrase in activate_command for phrase in activation_phrases):
+#             speak("Activating now with face verification sir!")
+#             activity_thread = threading.Thread(target=monitor_activities)
+#             activity_thread.daemon = True
+#             activity_thread.start()
+#             return True
+#         else:
+#             speak("Unable to understand.")
+#             return False
 
 def faceverify(status):
             speak("Let me verify your face please.")
@@ -265,26 +264,6 @@ def mind(text,response_check):
     else:
         return None
 
-# def main2():
-#         # remind_last_activity()  
-#     while True:
-#         facestatus = faceverify(status="True")
-#         if facestatus:
-#             greet_user()
-#             while True:
-#                 user_input = take_user_input()
-#                 if user_input:
-#                     result_query,response_check = handle_query(user_input)
-#                     result_mind = mind(user_input,response_check)
-#                     if result_mind == "exit":
-#                         break
-#                 else:
-#                     continue
-#                 return result_query,result_mind
-#         else:
-#             speak("Face not verified. Please try again.")
-#         response_check = False
-#         return None, "Face not verified"
 
 def main2():
     interactions = []
@@ -339,7 +318,7 @@ def main2():
 def main3():
     interactions = []
     greet_user()
-    say_last_activity()
+    # say_last_activity()
     activity_thread = threading.Thread(target=monitor_activities)
     activity_thread.daemon = True
     activity_thread.start()

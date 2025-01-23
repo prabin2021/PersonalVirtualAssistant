@@ -1,6 +1,7 @@
 import pyautogui
 import os
 import datetime
+import time
 from datetime import datetime
 def open_notepad():
         os.system('start notepad')
@@ -9,6 +10,13 @@ def open_notepad():
 def open_cmd():
         os.system('start cmd')
         return "Command prompt launched sir"
+def opensetting():
+        pyautogui.press('win')
+        time.sleep(1)
+        pyautogui.typewrite("whatsapp")
+        time.sleep(1)
+        pyautogui.press('enter')
+        return "Settings opened sir"
 def tell_time():
         from main import speak
         strTime = datetime.now().strftime("%H:%M:%S")
@@ -27,7 +35,7 @@ def maximize_screen():
 def close_window():
         from main import speak
         speak("Ok sir, I am closing it.")
-        pyautogui.hotkey('ctrl','w')
+        pyautogui.hotkey('alt','f4')
         return "Window closed sir"
 def exit():
         from main import speak

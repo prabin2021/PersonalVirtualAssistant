@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # import os
 # from email.mime.multipart import MIMEMultipart
 # from email.mime.text import MIMEText
@@ -85,8 +83,8 @@
 #                 return
 #             if message_done:
 #             # Your email credentials and SMTP server details
-#                 sender_email = "Your email"
-#                 ohoo = "Your email specific password"
+#                 sender_email = "sigdelprabin321@gmail.com"
+#                 ohoo = "omet osmk kavu tlrw"
 #                 smtp_server = "smtp.gmail.com"
 #                 smtp_port = 587  # or 465 for SSL
 #                 # Create MIMEMultipart message
@@ -146,7 +144,6 @@
 #         except Exception as e:
 #                 print("An error occurred while sending the email:", e)
 #                 speak("Sorry, I couldn't send the email. Please try again.")
->>>>>>> f97df38fc8739e123b644d2c0b213837be1fa928
 
 import os
 from email.mime.multipart import MIMEMultipart
@@ -161,8 +158,8 @@ def send_email():
 
     def send_email_logic(recipient_email, subject, message, file_path):
         try:
-            sender_email = "Your email"
-            sender_password = "Your email specific password"
+            sender_email = "sigdelprabin321@gmail.com"
+            sender_password = "omet osmk kavu tlrw"
             smtp_server = "smtp.gmail.com"
             smtp_port = 587
 

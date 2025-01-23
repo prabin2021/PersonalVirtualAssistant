@@ -10,7 +10,7 @@ class JarvisUI:
   
     def __init__(self, root,intent_callback = None):
         self.root = root
-        icon = PhotoImage(file="D:/New_Virtual_Assistant/logo.png")  # Replace with your image file path
+        icon = PhotoImage(file="D:/New_Virtual_Assistant/Images/logo.png")  # Replace with your image file path
         self.root.wm_iconphoto(True, icon)
         self.intent_callback = intent_callback
         self.root.title("Jarvis - Personal Assistant")
@@ -20,7 +20,7 @@ class JarvisUI:
         self.is_active = False
         self.conversation = []
         # === Added: Load GIF image ===
-        self.gif_image_path = "D:/New_Virtual_Assistant/jarvis.gif"
+        self.gif_image_path = "D:/New_Virtual_Assistant/Images/jarvis.gif"
         self.gif_image = None
         if os.path.exists(self.gif_image_path):
             self.gif_image = PhotoImage(file=self.gif_image_path)  # Load the GIF image
@@ -201,7 +201,7 @@ class JarvisUI:
             # Start the assistant in a separate thread
             threading.Thread(target=self.change_sample, daemon=True).start()
     def change_sample(self):
-        from Face_Verification.face_samples.takesample import take_sample
+        from Face_Verification.takesample import take_sample
         take_sample()
         self.add_to_conversation("System", "Face samples changed sucessfully.")
         self.update_status("Unactivated")
