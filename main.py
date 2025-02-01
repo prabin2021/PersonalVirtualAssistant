@@ -9,7 +9,6 @@ from camera_automation.open_camera import *
 from greetings.greeting import *
 from joke.jokes_teller import *
 from queries_handling_functions.query_handle import *
-from routine_handling.routine_sayer import *
 from sentiment_analyzer.sentiment_analyze import *
 from data_required.dialogues import *
 from youtube_automation.search_on_youtube import *
@@ -22,13 +21,14 @@ from last_activity_automation.last_actitivty_track import *
 from Face_Verification.newfaceverify import *
 from Face_Verification.takesample import *
 from data_required.dataforNLP import *
+from discord_automation.automate_discord import *
 from mtranslate import translate
 import threading
 import logging
 import types
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-engine.setProperty('rate', 170)
+engine.setProperty('rate', 160)
 engine.setProperty('voice', voices[0].id)
 logging.basicConfig(level=logging.INFO)
 recognizer = sr.Recognizer()
@@ -63,10 +63,10 @@ def take_user_input():
         recognizer.sample_rate = 48000
         recognizer.dynamic_energy_threshold = True
         recognizer.non_speaking_duration = 0.5
-        audio = recognizer.listen(source,150,10)
+        audio = recognizer.listen(source,160,10)
     query = None
     try:
-        print("Trying to recognize as Nepali language...")   
+        print("Trying to recognize as English language...")   
         query_translated = recognizer.recognize_google(audio, language="EN")
         # query_translated = translate(query1,to_language="en")
         print("You said:",query_translated)
@@ -85,47 +85,7 @@ def take_user_input():
             return None
     if not query:
         return None
-    
     return query
-
-# def activate_assistant():
-    
-#     speak("Sir, I am your virtual assistant Jarvis. Can I activate, sir?")
-#     activate_command = take_user_input()
-#     activation_phrases = [
-#         "yes bro you can activate",
-#         "okay sure",
-#         "i need you",
-#         "let's work together",
-#         "yes",
-#         "sure",
-#         "off course",
-#         "of course",
-#         "ofcourse",
-#         "go ahead",
-#         "activate now",
-#         "ok you can",
-#         "yes you can",
-#         "switch on",
-#         "activate and work",
-#         "you can start",
-#         "let's start",
-#         "you can activate",
-#     ]
-
-#     if activate_command is None:
-#         speak("Assistant not activated. Let me know when you need me, sir.")
-#         return False
-#     else:
-#         if any(phrase in activate_command for phrase in activation_phrases):
-#             speak("Activating now with face verification sir!")
-#             activity_thread = threading.Thread(target=monitor_activities)
-#             activity_thread.daemon = True
-#             activity_thread.start()
-#             return True
-#         else:
-#             speak("Unable to understand.")
-#             return False
 
 def faceverify(status):
             speak("Let me verify your face please.")
@@ -157,11 +117,9 @@ def advance_tokenize(text):
     return tokens
     
 def remove_stopwords(tokens):
-    
     return [token for token in tokens if token not in dynamic_stop_words]
 
 def advanced_stemmer(word):
-
     for suffix, replacement in suffixes:
         if word.endswith(suffix):
             return word[:-len(suffix)] + replacement
@@ -183,7 +141,6 @@ def compute_idf(words):
     for word in all_words:
         doc_count = sum(1 for document in words if word in document)
         idf[word] = math.log((total_docs + 1) / (doc_count + 1)) + 1
-        
     return idf
 
 def compute_tfidf(words):
@@ -222,6 +179,11 @@ for entry in dataset:
         answers.append(entry['answer'])
 tfidf_vectors_command = compute_tfidf(corpus)
 
+
+user_commands = []  # to store user's inputs
+predicted_intents = []  # to store predicted intents
+
+
 def get_answer(query,dataset):
     from data_required.intenstmatching import intent_to_function
     global listening
@@ -230,10 +192,13 @@ def get_answer(query,dataset):
         processed_query = preprocess_text(query)
         query_tfidf = compute_tfidf([processed_query])[0] 
         similarities = [cosine_similarity(query_tfidf, doc_vector) for doc_vector in tfidf_vectors_command]
-        if max(similarities) < 0.5:
+        if max(similarities) < 0.6:
             return "Sorry, I didn't understand that. Could you rephrase?"
         best_match_index = similarities.index(max(similarities))
         intent = dataset[best_match_index]['answer']
+        user_commands.append(query1)
+        if intent in intent_to_function:
+            predicted_intents.append(intent)
 
         if intent in intent_to_function and listening:
             func = intent_to_function[intent]
@@ -248,28 +213,37 @@ def get_answer(query,dataset):
         else:
             speak("Sorry, I am not trained for this function, sir.")
             return "Sorry, I am not trained for this function."
-
     except Exception as e:
         print("error occured")
         pass
 
+def calculate_accuracy():
+    total = len(user_commands)
+    predicted = len(predicted_intents)
+    accuracy = (predicted / total) * 100 if total > 0 else 0
+    print(f"Accuracy: {accuracy}%")
+    return accuracy,user_commands,predicted_intents
+def reset_tracking_data():
+    global user_commands, predicted_intents, expected_intents
+    user_commands = []
+    predicted_intents = []
+    expected_intents = []
+
+
 def mind(text,response_check):
     response_done = response_check
-    
     if response_done == False:
-        answer = get_answer(text, dataset)  # Possible generator function
-        if isinstance(answer, types.GeneratorType):  # Check if it's a generator
-            answer = "".join(answer)  # Consume generator to a single string
+        answer = get_answer(text, dataset)  
+        if isinstance(answer, types.GeneratorType): 
+            answer = "".join(answer)
         return answer
     else:
         return None
-
 
 def main2():
     interactions = []
     retry_limit = 3
     retry_count = 0
-
     while retry_count < retry_limit:
         facestatus = faceverify(status="True")
         if facestatus:
@@ -278,36 +252,31 @@ def main2():
             activity_thread = threading.Thread(target=monitor_activities)
             activity_thread.daemon = True
             activity_thread.start()
+            reset_tracking_data()
             while True:
-                user_input = take_user_input()  # Assuming this method gets new input
+                user_input = take_user_input() 
                 if user_input:
                     userstatus = check_status(user_input)
                     if userstatus :
                         interactions.append(("Jarvis", userstatus))
                         yield "Jarvis", userstatus  
                     interactions.append(("User", user_input))
-                    # Yield after the user input to display it in the UI
                     yield "User", user_input
-                    
-                    # Process the user's input (query and mind)
                     result_query, response_check = handle_query(user_input)
                     result_mind = mind(user_input, response_check)
-
                     if result_query:
                         interactions.append(("Jarvis", result_query))
-                        yield "Jarvis", result_query  # Yield Jarvis's response
+                        yield "Jarvis", result_query 
                     elif result_mind:
                         interactions.append(("Jarvis", result_mind))
-                        yield "Jarvis", result_mind  # Yield Jarvis's response
-
-                    # Check if the user wants to exit
+                        yield "Jarvis", result_mind 
                     if result_mind == "exit":
                         interactions.append(("Jarvis", "Goodbye!"))
-                        yield "Jarvis", "Goodbye!"  # Yield exit message
+                        yield "Jarvis", "Goodbye!"
+                        
                         break
                 else:
                     continue
-
         else:
             retry_count += 1
             speak("Face not verified. Please try again.")
@@ -318,77 +287,33 @@ def main2():
 def main3():
     interactions = []
     greet_user()
-    # say_last_activity()
+    say_last_activity()
     activity_thread = threading.Thread(target=monitor_activities)
     activity_thread.daemon = True
     activity_thread.start()
+    reset_tracking_data()
     while True:
-        user_input = take_user_input()  # Assuming this method gets new input
+        user_input = take_user_input() 
         if user_input:
             userstatus = check_status(user_input)
             if userstatus :
                 interactions.append(("Jarvis", userstatus))
                 yield "Jarvis", userstatus  
             interactions.append(("User", user_input))
-            # Yield after the user input to display it in the UI
             yield "User", user_input
-            
-            # Process the user's input (query and mind)
             result_query, response_check = handle_query(user_input)
             result_mind = mind(user_input, response_check)
-
             if result_query:
                 interactions.append(("Jarvis", result_query))
-                yield "Jarvis", result_query  # Yield Jarvis's response
+                yield "Jarvis", result_query  
             elif result_mind:
                 interactions.append(("Jarvis", result_mind))
-                yield "Jarvis", result_mind  # Yield Jarvis's response
-
-            # Check if the user wants to exit
+                yield "Jarvis", result_mind 
             if result_mind == "exit":
                 interactions.append(("Jarvis", "Goodbye!"))
-                yield "Jarvis", "Goodbye!"  # Yield exit message
+                yield "Jarvis", "Goodbye!"
                 break
         else:
             continue
     return "exit"
 
-
-# def main():
-#     while True:
-#         user_input = take_user_input()
-#         if user_input:
-#             # Send the user's input as an interaction
-#             yield "User", user_input
-            
-#             # Process the input
-#             result_query, response_check = handle_query(user_input)
-#             result_mind = mind(user_input, response_check)
-            
-#             # Send Jarvis's response (query or mind)
-#             if result_query:
-#                 yield "Jarvis", result_query
-#             elif result_mind:
-#                 yield "Jarvis", result_mind
-            
-#             # Handle exit condition
-#             if result_mind == "exit":
-#                 yield "Jarvis", "Goodbye!"
-#                 break
-#         else:
-#             continue
-
-        # response_check = False
-        # return interactions
-        
-
-# if __name__ == "__main__":
-#     status = activate_assistant()
-#     if status == True:
-#         facestatus =faceverify(status)
-#         if facestatus:
-#             greet_user()
-#             main()
-#         else:
-#             speak("Face not verified")
-            

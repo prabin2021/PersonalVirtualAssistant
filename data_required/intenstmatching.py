@@ -1,12 +1,8 @@
 
 from main import *
-# def uiimport():
-#     from FrontendFile.new import JarvisUI  
-#     root = tk.Tk()
-#     ui_instance = JarvisUI(root)
-#     return ui_instance
-# uii_instance = uiimport()
-
+def definefun():
+    speak("Please specify more clearly.")
+    return "Please specify more clearly."
 intent_to_function = {
     "open_email": lambda _:send_email(),
     "send_whatsapp_message":send_whatsapp_message,
@@ -18,7 +14,7 @@ intent_to_function = {
     "open_notepad": open_notepad,
     "jarwis_status_sleep":lambda _: toggle_jarwis_mode("sleep"),
     "jarwis_status_wakeup":lambda _: toggle_jarwis_mode("wakeup"),
-    # "open_facebook": open_facebook,
+    "open_discord": open_discord,
     "send_email": lambda _:send_email(),
     "tell_joke": tell_random_joke,
     "translate_text":lambda query: translate_text(query),
@@ -34,6 +30,7 @@ intent_to_function = {
     "close_window":close_window,
     "tell_time":tell_time,
     "exit":exit,
+    "uncomplete":definefun,
 
 }
 

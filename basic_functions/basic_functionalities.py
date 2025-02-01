@@ -11,11 +11,13 @@ def open_cmd():
         os.system('start cmd')
         return "Command prompt launched sir"
 def opensetting():
+        from main import speak
         pyautogui.press('win')
         time.sleep(1)
-        pyautogui.typewrite("whatsapp")
+        pyautogui.typewrite("settings")
         time.sleep(1)
         pyautogui.press('enter')
+        speak("Settings opened sir")
         return "Settings opened sir"
 def tell_time():
         from main import speak

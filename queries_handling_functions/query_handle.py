@@ -11,23 +11,6 @@ def handle_query(query):
             "what can you do":lambda:("I can perform several tasks like opening youtube,search anything on youtube , google, opening camera,notepad, typing,sending messages,and many more, what do you want me to do?"),
             ("i am bored","bored","feeling bored"):lambda:("Ok sir, What can I do for you then? Would you like to watch any videos in youtube?"),
             ("hey jarvis","hi jarvis"):lambda:("Yes sir,any command for me?"),
-            "chandrama":lambda:("Oh, yeah sir, she is your wife. You have married the beautiful girl sir."),
-            "bijan":lambda:("Oh, yeah I know him sir. He is your student. He feels bored while studying but he loves to play football. You should train him well."),
-            "sahil":lambda:("Oh, yeah I know him sir. He is your student. He is in A level now. You should train him well."),
-            "roshan":lambda:("Oh, yeah I got it. The few days ago you checked his bag when you lost your phone. He is really a silly guy sir."),
-            ("assam","yasam"):lambda:("Oh, yeah I got it. He used to offer you bhola sir."),
-            ("hari","hari","sigdel"):lambda:("Oh, yeah I got it. He is your dad sir."),
-            ("deepa","dipa"):lambda:("Yes sir, she is your mom."),
-            ("sansar","sanchar"):lambda:("Oh, yeah I got it. You saved his contact number as hancy hero sir."),
-            ("saughat","saugat","sugat"):lambda:("Oh, yeah I got it sir.He is your friend since 11 class. He has same MT 15 bike as yours."),
-            ("anurag","anuragh"):lambda:("Oh, yeah I got it sir. Your silly friend. He always argue with saugat."),
-            "ishan":lambda:("Oh, yeah I got it. He always seems to come with you while going to college."),
-            "hemanta":lambda:("Oh, yeah I know him sir, he is principal of Genius school and I think he is pro in smoking."),
-            "nikesh":lambda:("Yes, of course sir, last time he became famous when he got drunk, he messed up with Abhishek sir too. His profile is in Alpha male group."),
-            "sumit":lambda:("Oh, yeah I know him sir, he is coordinator of Genius school and I think he loves to dance when he is drunk."),
-            "abhishek":lambda:("Oh, yes I know him sir, he always uses the word 'muji' when he is drunk, he needs to eat a lot at a single time."),
-            "puran":lambda:("Oh, yeah I know him sir, he is a sports teacher, he plays basketball well."),
-            "rupes":lambda:("Oh, yeah I know him sir, he is an accountant in Genius school, he always shakes hands with you when he meets with you."),
             ("same here","i am also fine","i am also good","i am good too","i am fine too"):lambda:("That's nice to hear sir."),
             ("i am happy", "feeling good", "great day"): lambda: ("That's wonderful to hear! Let's keep it that way."),
             ("i am sad", "feeling down", "not good"): lambda: ("I'm sorry to hear that. How can I help you feel better?"),
@@ -71,7 +54,6 @@ def handle_query(query):
             "what's your favorite season": lambda: ("I enjoy all seasons equally since I’m here indoors."),
             "what's your favorite animal": lambda: ("I find all animals fascinating. Do you have a favorite?")
             
-            
         }
         response_done = False
         query_lower = query.lower()
@@ -92,13 +74,4 @@ def handle_query(query):
             return response_text,response_done  # Return the response text to display
         else:
             return None,response_done
-        
-        # query_lower = query.lower()
-        # for key, response in common_queries.items():
-        #     if key == query_lower:  # Check for exact match
-        #         response()
-        #         return  # Stop processing further queries
-        #     elif isinstance(key, tuple) or query_lower in key:  # Check for partial match within tuple
-        #         response()
-        #         return  # Stop processing further queries
-        # return None
+    

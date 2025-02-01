@@ -35,7 +35,6 @@ def translate_text(query):
                     "rephrase the input", "transform and rewrite", "make this into something else",
                     "adjust the wording", "turn this sentence into another form","translate it","convert it","translate"
 ]
-
     languages = {
         "english": "en", "mandarin": "zh", "spanish": "es", "hindi": "hi", "arabic": "ar",
         "portuguese": "pt", "bengali": "bn", "russian": "ru", "japanese": "ja", "punjabi": "pa",

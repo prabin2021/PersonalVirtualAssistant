@@ -56,20 +56,23 @@ suffixes = [
 
 
 commands = {
-    "open_email": [
-        "open my email", "check my email", "read my email", "read my e-mail",
-        "open e-mail", "show me my email", "launch email", "I need email","show emails", "display my email", "can you bring up email", "emails please", "load my emails",
-        "can you open my email", "let me see my email", "start email","open my email", "check my email", "read my e-mail","read my email", "open e-mail","i need email","launch email","can i have email","show me my email"
-    ],
-    "send_whatsapp_message": [
-        "send a message on WhatsApp", "WhatsApp this message", "shoot a message on WhatsApp","message someone on WhatsApp", "text on WhatsApp","i want to message through whatsapp"
-        "send WhatsApp message", "WhatsApp message","want to text someone through whatsapp","send a message in WhatsApp","send a message using WhatsApp"
+
+    "uncomplete": [
+        "help me","open", "check", "read","show", "launch", "need","display", "can", "bring","please", "load",
+        "let", "start","send","want","access","text","take","write","search","find","last","turn","click"
     ],
     "open_whatsapp": [
-        "open WhatsApp", "launch WhatsApp", "start WhatsApp", "access WhatsApp", "can i have whatsapp","i need whatsapp","show whatsapp","initiate WhatsApp", "WhatsApp app please", "where is WhatsApp", "WhatsApp window"
+        "open WhatsApp", "launch WhatsApp", "start WhatsApp", "access WhatsApp", "can i have whatsapp","i need whatsapp","show whatsapp","initiate WhatsApp", "WhatsApp app please", "where is WhatsApp", "WhatsApp window","can i get WhatsApp"
     ],
-    "open_command prompt": [
-        "start cmd", "cmd prompt please", "run command prompt", "show me the cmd", "open terminal","open command prompt", "launch command prompt", "start command prompt", "access command prompt","can i have command prompt","i need command prompt","show my command prompt"
+    "open_discord": [
+        "open discord", "launch discord", "start discord", "access discord", "can i have discord","i need discord","show discord","initiate discord", "discord app please", "where is discord", "discord window","can i get discord"
+    ],
+    "send_whatsapp_message": [
+        "help me to message in whatsapp","send a message on WhatsApp", "WhatsApp this message", "shoot a message on WhatsApp","message someone on WhatsApp", "text on WhatsApp","i want to message through whatsapp"
+        "send WhatsApp message", "WhatsApp message","want to text someone through whatsapp","send a message in WhatsApp","send a message using WhatsApp"
+    ],
+    "open_command_prompt": [
+        "can you start cmd", "can i have cmd prompt please", "can you run command prompt", "show me the cmd", "open terminal","can you open command prompt", "can you launch command prompt", "can you start command prompt", "i want to access command prompt","can i have command prompt","i need command prompt","show my command prompt", "ope command prompt"
     ],
     "open_camera": [
         "start the camera", "turn the camera on", "enable camera", "webcam please", "access my camera","open my camera", "turn on the camera", "launch camera", "start my camera",
@@ -92,42 +95,41 @@ commands = {
         "facebook app", "social media access", "launch my Facebook", "Facebook login", "start my Facebook","open Facebook", "launch Facebook", "start Facebook", "access Facebook", "use social media","can i have facebook","i need facebook","show my facebook"
     ],
     "send_email": [
-        "compose email", "write an email", "draft a mail", "email someone", "send a message via email","send an email", "send a mail", "e-mail someone", "dispatch an email", "send email to","help me to send email"
+        "write an email", "draft a mail", "email someone", "send a message via email", "send an email", "send a mail", "e-mail someone", "dispatch an email", "send email to", "help me to send email", "i want to send email to my friend", "can i send email to someone", 
+        "i need to email someone", "can you help me send an email", "how can i send an email to my colleague", "i wish to send an email", "send email to my family", "i want to send a message via email", "help me email a contact", "can i email my friend", "i want to write an email to someone", 
+        "can you send an email for me", "help me dispatch an email", "is it possible to email someone", "can you compose an email for me", "i want to send a mail to my friend""help me to send email","compose email", "write an email", "draft a mail", "email someone", "send a message via email","send an email", "send a mail", "e-mail someone", "dispatch an email", "send email to","help me to send email"
     ],
     "tell_joke": [
-        "make me giggle","i want to laugh" ,"say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke","tell me another joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh", "can you make me laugh"
+        "make me giggle","i want to laugh" ,"say something funny", "give me a laugh", "share a funny line", "jokes please","tell me a joke","i want you to tell me joke","i want you to tell me another joke","tell me another joke", "tell me some jokes", "say joke", "i want jokes", "provide me some jokes","make me laugh", "can you make me laugh"
     ],
     "translate_text": [
-        "interpret this text", "convert text to another language", "translate this content", "switch the language", "language conversion","translate the text", "convert the text","change the text","change this sentence into another language", "translate the words into another language", "can you convert ", "can you translate this", "convert these sentences","convert this sentences into another language", "translate these sentences"
+        "help me to translate text","interpret this text", "convert text to another language", "translate this content", "switch the language", "language conversion","translate the text", "convert the text","change the text","change this sentence into another language", "translate the words into another language", "can you convert ", "can you translate this", "convert these sentences","convert this sentences into another language", "translate these sentences"
         "translate the word", "translate the words", "translate words", "convert the words","translate a text","convert words to another language", "translate my input", "convert to another language", "interpret this", "transform this line", "translate these lines",
     ],
     "open_google": [
-        "launch search engine", "access Google search", "where's Google", "Google please","open Google", "launch Google", "start Google", "access Google", " want to use Google","show me google","can i have google  ", "i need google"
+        "help me to open google","launch search engine", "access Google search", "where's Google", "Google please","open Google", "launch Google", "start Google", "access Google", " want to use Google","show me google","can i have google  ", "i need google"
     ],
     "search_wikipedia": [
         "search in wikipedia", "search for something in wikipedia","find info on Wikipedia", "Wikipedia search for something", "Wikipedia lookup", "fetch from Wikipedia", "Wikipedia article about", "wikipedia search about", "access information about something through wikipedia", "use wikipedia to search for anything"
         "scrap information about something through wikipedia",
     ],
     "search_google": [
-        "look up on Google", "Google lookup", "find via Google", "Google query", "search engine search","search in Google", "search for something in Google", "google search", "access information about something through Google", "use Google to search for anything","using google search for","scrap information using google","find information about something through Google"
+        "look up on Google", "Google lookup", "find via Google", "Google query", "search engine search","search in Google", "search for something in Google", "google search", "access information about something through Google", "use Google to search for anything","using google search for","scrap information using google","find information about something through Google","can you search about something in google","help me to search in google",
     ],
     "open_youtub": [
-        "YouTube access", "YouTube app", "start the YouTube", "show me YouTube","open YouTube", "launch YouTube", "start YouTube", "i want YouTube", "show YouTube ","can i have youtube ", "i need youtube", "bring youtube"
+        "help me to open YouTube","YouTube access", "YouTube app", "start the YouTube", "show me YouTube","open YouTube", "launch YouTube", "start YouTube", "i want YouTube", "show YouTube ","can i have youtube ", "i need youtube", "bring youtube"
     ],
     "search_youtube": [
-        "look for videos on YouTube", "video search on YouTube", "explore on YouTube", "find songs on YouTube","search in YouTube", "find on YouTube", "search on YouTube", "watch videos on YouTube", "listen music in  YouTube ","want to search in youtube ", "find out in youtube"
+        "help me to search about in YouTube","look for videos on YouTube", "video search on YouTube", "explore on YouTube", "find songs on YouTube","search in YouTube", "find on YouTube", "search on YouTube", "watch videos on YouTube", "listen music in  YouTube ","want to search in youtube ", "find out in youtube"
     ],
     "open_calculator": [
         "calculator app", "math tool access", "open my calculator", "launch the calculator", "start calculations","open calculator", "launch calculator", "start calculator", "access calculator", "open the calculator"
     ],
     "check_battery": [
-        "show battery info", "current charge level", "battery details", "remaining battery", "battery capacity","check battery status", "battery percentage", "how much battery is left", "battery level", "what's my battery"
-    ],
-    "play_game": [
-        "play a game", "open a game", "start a game", "launch a game", "let's play a game", "i want game"
+        "help me to check my battery life","show battery info", "current charge level", "battery details", "remaining battery", "battery capacity","check battery status", "battery percentage", "how much battery is left", "battery level", "what's my battery","what is my battery life"
     ],
     "open_settings": [
-        "settings menu", "system settings", "device settings", "access preferences", "configure settings","open settings", "launch settings", "start settings", "go to settings", "open system settings"
+        "help me to open settings","settings menu", "system settings", "device settings", "access preferences", "configure settings","open settings", "launch settings", "start settings", "go to settings", "open system settings"
     ],
     "previous_activities": [
         "activity log", "what have I done earlier", "my tasks history", "what were we working on", "previous sessions","show my previous activities","what were my previous works", "what we were doing last time","what we were doing yesterday", " in which project we were working last time", "want to see my previous tasks", "trace my previous works"
@@ -148,11 +150,7 @@ commands = {
     "tell_time": [
         "what hour is it", "how late is it", "check the clock", "give me the time", "show current hour","tell me the time", "what time is it now", "can you tell me the time", "what's the current time", "show the time", "say me the time", "what is time now", "current time please", "can you show me the time","i want to know the time"
     ],
-    "check_weather": [
-        "weather today", "forecast please", "is it sunny", "rain or shine", "current conditions","what's the weather", "check the weather", "tell me the weather",
-        "how's the weather", "weather forecast", "today's weather",
-        "current weather", "weather report", "show me the weather"
-]
+
 }
 
 

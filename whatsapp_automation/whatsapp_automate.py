@@ -14,7 +14,6 @@ def open_whatsapp():
     pi.press('enter')
     time.sleep(1)
     open_windows = gw.getAllTitles()
-    print(open_windows)
     for window in open_windows:
         if "WhatsApp" in window:
             speak("Do you want to send message to anyone sir? If yes whom do you want to send?")
@@ -25,16 +24,13 @@ def open_whatsapp():
                 start_keywords = ["search for"," seek for","look for", "find", "to", "about","at","from","with", "for", "of", "by", "too","search", "on", "in", "off"]
                 words = choice.lower().split()
                 search_query = ""
-                # # Iterate over words to extract search query
                 for i, word in enumerate(words):
                     if word in start_keywords:
                         search_query = " ".join(words[i + 1:])
-                
                 pi.hotkey('ctrl','f')
                 time.sleep(1)
                 pi.write(search_query)
                 time.sleep(1)
-                # pi.moveTo(200,240)
                 speak("Is this the person whom you want to connect?")
                 person = take_user_input()
                 if any(keyword in person.lower() for keyword in ("yes","yeah","sure","of course","off course","ofcourse","okay","okey","yep","click")if person is not None):
@@ -59,10 +55,8 @@ def open_whatsapp():
             else:
                 speak("Ok as your wish sir.")
                 return "Whatsapp Opened"
-        
     speak("PLease install whatsapp applications first")
     return "Whatsapp is not installed on your device"
-
 
 def send_whatsapp_message():
     from main import speak
@@ -73,7 +67,6 @@ def send_whatsapp_message():
     pi.press('enter')
     time.sleep(1)
     open_windows = gw.getAllTitles()
-    print(open_windows)
     for window in open_windows:
         if "WhatsApp" in window:
             speak("Whom do you want to send message sir?")
@@ -84,7 +77,6 @@ def send_whatsapp_message():
                 start_keywords = ["search for"," seek for","look for", "find", "to", "about","at","from","with", "for", "of", "by", "too","search", "on", "in", "off","name"]
                 words = choice.lower().split()
                 search_query = ""
-                # # Iterate over words to extract search query
                 for i, word in enumerate(words):
                     if word in start_keywords:
                         search_query = " ".join(words[i + 1:])

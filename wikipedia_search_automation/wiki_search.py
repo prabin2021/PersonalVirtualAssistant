@@ -1,14 +1,11 @@
 import wikipedia
 import re
+
 def extract_search_Query(query):
-        # from main import speak
         start_keywords = ["search","for","look for","find","find that","about","search about","tell me","that","answer of","question","questions"]
-        # Split the query into words
         future_query = query
         words = query.split()
-        # Initialize search query
         search_query = ""
-        # # Iterate over words to extract search query
         for i, word in enumerate(words):
             if word in start_keywords:
                 search_query1 = " ".join(words[i + 1:])

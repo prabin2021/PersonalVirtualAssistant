@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, Button, Text,Entry, Frame, Toplevel,PhotoImage, END
+from tkinter import Tk, Label, Button, Text,Entry, Frame, Toplevel,PhotoImage, messagebox, END
 from datetime import datetime
 import threading
 import sys
@@ -6,25 +6,26 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from main import main2,main3
+from Face_Verification.newfaceverify import *
+
 class JarvisUI:
-  
+
     def __init__(self, root,intent_callback = None):
         self.root = root
-        icon = PhotoImage(file="D:/New_Virtual_Assistant/Images/logo.png")  # Replace with your image file path
+        icon = PhotoImage(file="D:/New_Virtual_Assistant/Images/logo.png") 
         self.root.wm_iconphoto(True, icon)
         self.intent_callback = intent_callback
         self.root.title("Jarvis - Personal Assistant")
-        self.root.geometry("1150x950")
+        self.root.geometry("1350x950")
         self.root.configure(bg="#1c1c1c")
         self.current_input = ""
         self.is_active = False
         self.conversation = []
-        # === Added: Load GIF image ===
         self.gif_image_path = "D:/New_Virtual_Assistant/Images/jarvis.gif"
         self.gif_image = None
         if os.path.exists(self.gif_image_path):
-            self.gif_image = PhotoImage(file=self.gif_image_path)  # Load the GIF image
-        # Header Section
+            self.gif_image = PhotoImage(file=self.gif_image_path) 
+
         self.header_frame = Frame(self.root, bg="#292929", height=70)
         self.header_frame.pack(fill="x", side="top")
 
@@ -39,7 +40,6 @@ class JarvisUI:
         self.time_label.pack()
         self.update_time()
 
-        # Conversation Area
         self.conversation_frame = Frame(self.root, bg="#1c1c1c", bd=2,relief="solid", highlightbackground="RED", highlightthickness=2)
         self.conversation_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -70,32 +70,43 @@ class JarvisUI:
         self.clear_button.grid(row=0, column=2, padx=10, pady=5)
 
         self.accuracy_button = Button(
-            self.footer_frame, text="Accuracy", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
-            command=self.show_accuracy_popup
+            self.footer_frame, text="Face Accuracy", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
+            command=self.show_face_accuracy_popup
         )
         self.accuracy_button.grid(row=0, column=3, padx=10, pady=5)
+
+
+
+        self.accuracy_button = Button(
+            self.footer_frame, text="command Accuracy", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
+            command=self.show_intents_accuracy_popup
+        )
+        self.accuracy_button.grid(row=0, column=4, padx=10, pady=5)
+
+
+
         self.status_label = Label(
             self.footer_frame, text="Unactivated", font=("Arial", 12), bg="#292929", fg="red"
         )
-        self.status_label.grid(row=0, column=4, padx=10, pady=5)
+        self.status_label.grid(row=0, column=5, padx=10, pady=5)
         
         self.password_button = Button(
             self.footer_frame, text="Password", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
             command=self.handle_password
         )
-        self.password_button.grid(row=0, column=5, padx=10, pady=5)
+        self.password_button.grid(row=0, column=6, padx=10, pady=5)
 
         self.face_button = Button(
             self.footer_frame, text="Change Face", font=("Arial", 12, "bold"), bg="#FFA500", fg="white",border="10px 100px / 120px 100px",
             command=self.change_face_sample
         )
-        self.face_button.grid(row=0, column=6, padx=10, pady=5)
+        self.face_button.grid(row=0, column=7, padx=10, pady=5)
 
         self.terminate_button = Button(
             self.footer_frame, text="Terminate", font=("Arial", 12, "bold"), bg="#A40000", fg="white",border="10px 100px / 120px 100px",
             command=sys.exit
         )
-        self.terminate_button.grid(row=0, column=7, padx=10, pady=5)
+        self.terminate_button.grid(row=0, column=8, padx=10, pady=5)
 
         if self.gif_image:
             self.add_gif_to_conversation()
@@ -178,9 +189,8 @@ class JarvisUI:
             self.is_active = True
             self.add_to_conversation("System", "Jarvis is now active.")
             self.remove_gif_from_conversation()
-            # Start the assistant in a separate thread
             threading.Thread(target=self.run_jarvis2, daemon=True).start()
-            self.start_button.config(state="disabled")  # Disable Start button while active
+            self.start_button.config(state="disabled")  
     def run_jarvis2(self):
         self.update_status("Activated")
         for speaker, message in main3():
@@ -213,7 +223,6 @@ class JarvisUI:
             self.start_button.config(state="normal")  # Re-enable the Start button
             self.root.after(1000,self.clear_conversation2)
         else:
-            # self.add_to_conversation("System", "Jarvis is stopped.")
             self.root.after(1000,self.clear_conversation2)
 
     def clear_conversation(self):
@@ -228,40 +237,34 @@ class JarvisUI:
         self.conversation_display.config(state="disabled")
         self.root.after(1000,self.add_gif_to_conversation)
         
-    def show_accuracy_popup(self):
-        accuracy = "Face Recognition: 95%\nIntent Classification: 92%\nText Translation: 89%"
-        popup = Toplevel(self.root)
-        popup.title("Accuracy Metrics")
-        popup.geometry("300x200")
-        popup.configure(bg="#292929")
+    def show_face_accuracy_popup(self):
+        from Face_Verification.newfaceverify import analyze_face
+        if not self.is_active:
+            self.remove_gif_from_conversation()
+            self.add_to_conversation("System", "Checking for face accuracy.")
+            result = analyze_face()
+            self.add_to_conversation("System", f"Your accuracy result is {result:.2f}%")
+            self.root.after(4000,self.clear_conversation2)
+    def show_intents_accuracy_popup(self):
+        from main import calculate_accuracy
+        self.remove_gif_from_conversation()
+        self.add_to_conversation("System", "Checking for commands accuracy.")
+        accuracy,usercommands,predictedintents = calculate_accuracy()
+        self.add_to_conversation("System", f"Your accuracy result is {accuracy:.2f}%")
+        self.add_to_conversation("System", f"User given commands are: { usercommands}")
+        self.add_to_conversation("System", f"Predicted intents are: { predictedintents}")
 
-        accuracy_label = Label(
-            popup, text=accuracy, font=("Arial", 12), bg="#292929", fg="white", justify="left"
-        )
-        accuracy_label.pack(pady=20, padx=20)
-
-        close_button = Button(
-            popup, text="Close", font=("Arial", 12), bg="#FF0000", fg="white",
-            command=popup.destroy
-        )
-        close_button.pack(pady=10)
     def custom_hash(self,password):
-                """Custom hashing algorithm to encrypt the password."""
                 hash_value = 0
                 prime = 31  # Use a small prime number for hashing
-
-                # Loop through each character in the password manually
                 position = 1
                 for char in password:
-                    # Calculate ASCII value manually
                     ascii_value = 0
                     for byte in char.encode("utf-8"):  # Convert character to its raw byte value
                         ascii_value += byte
-
                     # Custom multiplication logic: ASCII value * position * prime
                     hash_value += ascii_value * position * prime
                     position += 1
-
                 # Manually convert to hexadecimal
                 hex_result = ""
                 hex_characters = "0123456789abcdef"
@@ -269,7 +272,6 @@ class JarvisUI:
                     remainder = hash_value % 16
                     hex_result = hex_characters[remainder] + hex_result
                     hash_value //= 16
-
                 return hex_result
     
     def handle_password(self):
@@ -279,11 +281,9 @@ class JarvisUI:
             popup.title("Enter Password")
             popup.geometry("500x150")
             popup.configure(bg="#292929")
-
             Label(popup, text="Enter Password To Proceed:", font=("Arial", 12), bg="#292929", fg="white").pack(pady=10)
             password_entry = Entry(popup, show="*", font=("Arial", 12), bg="white", fg="black")
             password_entry.pack(pady=5)
-            
 
             def check_password():
                 entered_password = password_entry.get()
@@ -308,7 +308,6 @@ class JarvisUI:
                     self.clear_conversation()
                     self.start_jarvis2()  # Call main function
                     self.add_to_conversation("System", "Password set! Activating system...")
-
             Button(
                 popup, text="Submit", font=("Arial", 12,"bold"), bg="#00FF7F", fg="white", command=check_password
             ).pack(pady=10)
@@ -345,7 +344,6 @@ class JarvisUI:
                     popup.destroy()
                     self.clear_conversation()
                     self.change_face_samples()  # Call main function
-
 
             Button(
                 popup, text="Submit", font=("Arial", 12,"bold"), bg="#00FF7F", fg="white", command=check_password
